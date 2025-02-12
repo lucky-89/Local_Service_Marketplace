@@ -6,7 +6,7 @@ const clientSchema = new mongoose.Schema({
     password: { type: String, required: true },
     phone: { type: String, required: true, unique: true },
     isVerified: { type: Boolean, default: false },
-    otp: { type: String },  
+    otp: { type: String, default: null },  
     otpExpires: { type: Date }  
 });
 

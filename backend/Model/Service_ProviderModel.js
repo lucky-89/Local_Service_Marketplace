@@ -8,7 +8,7 @@ const serviceProviderSchema = new mongoose.Schema({
     category: { type: String, required: true },
     price: { type: Number, required: true },
     isVerified: { type: Boolean, default: false },
-    otp: { type: String },
+    otp: { type: String},
     otpExpires: { type: Date }  
 });
 
