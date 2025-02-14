@@ -1,34 +1,32 @@
-const Service_Provider = require('../Model/Service_ProviderModel');
-const bcrypt= require('bcryptjs');
-const {sendOtp} = require('../otpService');
-const jwt = require('jsonwebtoken');
+const User = require('../Model/Service_ProviderModel');
+const express = require("express");
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+const sendPushNotification = require("../sendNotification");
 
+const router = express.Router();
+
+const admin = require("firebase-admin");
 // for service provider register
 
 exports.registerServiceProvider= async(req,res)=>{
-
+try{
     const {name,email,password,category,price,phone}=req.body;
-
-    try {
-            const userExist = await Service_Provider.findOne({ phone });
-            if (userExist) return res.status(400).json({ message: 'Phone number already registered' });
-    
-            const hashpass = await bcrypt.hash(password, 12);
-            const otp = Math.floor(100000 + Math.random() * 900000).toString();
-            const otpExpires = new Date(Date.now() + 5 * 60 * 1000); // OTP expires in 5 minutes
-    
-            const user = await Service_Provider.create({ name, email, phone,category,price, password: hashpass, otp, otpExpires });
-    
-            const otpSent = await sendOtp(phone, otp);
-            if (!otpSent) return res.status(500).json({ message: 'OTP sending failed' });
-    
-            // Store phone number in cookies
-            res.cookie('phone', phone, { httpOnly: true, maxAge: 10 * 60 * 1000 }); // Expires in 10 minutes
-    
-            res.status(201).json({ message: 'OTP sent, verify to complete registration' });
-        } catch (error) {
-            res.status(500).json({ message: error.message });
+ if (!phone || !fcmToken) {
+            return res.status(400).json({ message: "Phone and FCM Token are required" });
         }
+
+        const otp = Math.floor(1000 + Math.random() * 9000);
+
+        await User.create({ name, phone, email, password, otp, category, price });
+
+        await sendPushNotification(fcmToken, "OTP Verification", `Your OTP is: ${otp}`);
+
+        res.json({ message: "OTP sent successfully" });
+    } catch (error) {
+        console.error("Registration error:", error);
+        res.status(500).json({ message: "Internal Server Error" });
+    }
     };
     
 
@@ -39,11 +37,11 @@ exports.loginServiceProvider= async (req,res)=>{
     const {email,password}= req.body;
 
     try{
-        const user=await Service_Provider.findOne({email});
+        const user=await User.findOne({email});
         if(!user){
             return res.status(400).json({message:'Either email or password does not match'});
         }
-        if (!user.isVerified) return res.status(400).json({ message: 'Account not verified. Please verify OTP.' });
+        if (!user.verified) return res.status(400).json({ message: 'Account not verified. Please verify OTP.' });
         const isMatch= await bcrypt.compare(password,user.password);
         if(!isMatch){
             return res.status(400).json({message:'Either email or password does not match'});
@@ -60,7 +58,7 @@ exports.loginServiceProvider= async (req,res)=>{
 
 exports.getSpProfile = async (req, res) => {
     try {
-        const user = await Service_Provider.findById(req.user.id).select("-password -otp -otpExpires");
+        const user = await User.findById(req.user.id).select("-password -otp -otpExpires");
 
         if (!user) {
             return res.status(404).json({ message: "User not found" });
@@ -75,77 +73,66 @@ exports.getSpProfile = async (req, res) => {
 // for service provider verify otp
 
 exports.spverifyOtp = async (req, res) => {
-    const { otp } = req.body;
-        const phone = req.cookies.phone; // Retrieve phone from cookies
-    
-        if (!phone) {
-            return res.status(400).json({ message: "Session expired. Please register again." });
-        }
-    
-        try {
-            const user = await Service_Provider.findOne({ phone });
-    
-            if (!user || !user.otp) {
-                return res.status(400).json({ message: "OTP not generated. Request a new one." });
-            }
-    
-            if (user.otp !== otp) {
-                return res.status(400).json({ message: "Invalid OTP. Try again." });
-            }
-    
-            if (new Date() > user.otpExpires) {
-                return res.status(400).json({ message: "OTP expired. Request a new one." });
-            }
-    
-            user.otp = null;
-            user.otpExpires = null;
-            user.isVerified = true;
-            await user.save();
-    
-            // Remove phone number from cookies
-            res.clearCookie('phone');
-    
-            res.status(200).json({ message: "OTP verified successfully. Account activated." });
-    
-        } catch (error) {
-            res.status(500).json({ message: "Error verifying OTP.", error: error.message });
-        }
+   const { phone, otp } = req.body;
+   
+       try {
+           let user = await User.findOne({ phone });
+   
+           if (!user) {
+               return res.status(400).json({ message: "User not found" });
+           }
+   
+           // Check if OTP matches
+           if (user.otp !== otp) {
+               return res.status(400).json({ message: "Invalid OTP" });
+           }
+   
+           // Mark user as verified
+           user.verified = true;
+           user.otp = null; // Remove OTP after successful verification
+           await user.save();
+   
+           res.status(200).json({ message: "OTP verified successfully! Account is now active." });
+       } catch (error) {
+           console.error("Error verifying OTP:", error);
+           res.status(500).json({ message: "Server error" });
+       }
     };
     
     // resend otp
     
-    exports.spresendOtp = async (req, res) => {
-        const phone = req.cookies.phone; 
+    // exports.spresendOtp = async (req, res) => {
+    //     const phone = req.cookies.phone; 
     
-        if (!phone) {
-            return res.status(400).json({ message: "Session expired. Please register again." });
-        }
+    //     if (!phone) {
+    //         return res.status(400).json({ message: "Session expired. Please register again." });
+    //     }
     
-        try {
-            const user = await Service_Provider.findOne({ phone });
+    //     try {
+    //         const user = await Service_Provider.findOne({ phone });
     
-            if (!user) {
-                return res.status(400).json({ message: "User not found. Please register first." });
-            }
+    //         if (!user) {
+    //             return res.status(400).json({ message: "User not found. Please register first." });
+    //         }
     
-            if (user.isVerified) {
-                return res.status(400).json({ message: "Account already verified. No need to resend OTP." });
-            }
+    //         if (user.isVerified) {
+    //             return res.status(400).json({ message: "Account already verified. No need to resend OTP." });
+    //         }
     
-            const newOtp = Math.floor(100000 + Math.random() * 900000).toString();
-            user.otp = newOtp;
-            user.otpExpires = new Date(Date.now() + 5 * 60 * 1000); 
+    //         const newOtp = Math.floor(100000 + Math.random() * 900000).toString();
+    //         user.otp = newOtp;
+    //         user.otpExpires = new Date(Date.now() + 5 * 60 * 1000); 
     
-            await user.save();
-            const otpSent = await sendOtp(phone, newOtp);
+    //         await user.save();
+    //         const otpSent = await sendOtp(phone, newOtp);
     
-            if (!otpSent) return res.status(500).json({ message: 'Failed to send OTP. Try again later.' });
+    //         if (!otpSent) return res.status(500).json({ message: 'Failed to send OTP. Try again later.' });
     
-            res.status(200).json({ message: "New OTP sent successfully." });
+    //         res.status(200).json({ message: "New OTP sent successfully." });
     
-        } catch (error) {
-            res.status(500).json({ message: "Error resending OTP.", error: error.message });
-        }
-    };
+    //     } catch (error) {
+    //         res.status(500).json({ message: "Error resending OTP.", error: error.message });
+    //     }
+    // };
     
     

@@ -3,22 +3,20 @@ const cors= require('cors');
 const mongoose= require('mongoose');
 require('dotenv').config();
 const AuthRoutes= require('./Routes/AuthRoutes');
-const cookieParser = require('cookie-parser');
-
+const admin = require("firebase-admin");
 
 const app = express();
 app.use(cors());
 
 
-
-
 app.use(express.json()); 
-app.use(cookieParser())
 
-mongoose.connect(process.env.MONGO_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-}).then(() => console.log('MongoDB connected'))
+const serviceAccount = require("./firebase-service-account.json");
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount)
+});
+
+mongoose.connect(process.env.MONGO_URI).then(() => console.log('MongoDB connected'))
 .catch(err => console.log(err));
 
 app.use('/api', AuthRoutes);
