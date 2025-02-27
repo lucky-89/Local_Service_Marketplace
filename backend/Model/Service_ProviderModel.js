@@ -10,8 +10,8 @@ const serviceProviderSchema = new mongoose.Schema({
     isAvailable: { type: Boolean, default: false }, 
     servicePinCodes: { type: [String], default: [] },
     lastUpdated: { type: Date, default: Date.now },
-    profileImage: { type: String, required: true }, 
-    aadharImage: { type: String, required: true },  
+    profileImage: { type: String}, 
+    aadharImage: { type: String },  
     isVerified: { type: Boolean, default: false }   
 }, { timestamps: true });
 
