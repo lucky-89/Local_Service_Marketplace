@@ -3,26 +3,44 @@ const express = require("express");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
+const upload = require("../uploadMiddleware");
+
 const router = express.Router();
+
+// Register a service provider
 
 exports.registerServiceProvider = async (req, res) => {
     try {
-        const { name, email, password, category, price, phone } = req.body;
+        upload.fields([{ name: "profileImage" }, { name: "aadharImage" }])(req, res, async (err) => {
+            if (err) return res.status(400).json({ message: "Image Upload Error", error: err });
 
-        if (!name || !email || !password || !category || !price || !phone) {
-            return res.status(400).json({ message: "All fields are required" });
-        }
+            const { name, phone, email, password, category, price, flag } = req.body;
+            const profileImage = req.files["profileImage"] ? req.files["profileImage"][0].path : null;
+            const aadharImage = req.files["aadharImage"] ? req.files["aadharImage"][0].path : null;
 
-        const existingUser = await User.findOne({ $or: [{ email }, { phone }] });
-        if (existingUser) {
-            return res.status(400).json({ message: "Email or Phone already in use" });
-        }
+            if (!name || !phone || !email || !password || !category || !price || !profileImage || !aadharImage) {
+                return res.status(400).json({ message: "All fields are required" });
+            }
+            const salt = await bcrypt.genSalt(10);
+            const hashedPassword = await bcrypt.hash(password, salt);
 
-        const hashedPassword = await bcrypt.hash(password, 10);
+            let isVerified=false;
+            if(flag==1){
+                isVerified=true;
+                const newUser = new User({
+                    name, phone, email, password:hashedPassword, category, price,
+                    profileImage, aadharImage, isVerified
+                });
+    
+                await newUser.save();
+                res.status(201).json({ message: "User registered successfully", isVerified });
+            }
+            else{
+                res.status(201).json({ message: "User registered unsuccessful please provide the same user profile image and adhar image", isVerified });
+            }
 
-        await User.create({ name, email, phone, password: hashedPassword, category, price });
-
-        res.status(201).json({ message: "Service provider registered successfully" });
+            
+        });
     } catch (error) {
         console.error("Registration error:", error);
         res.status(500).json({ message: "Internal Server Error" });
@@ -71,3 +89,45 @@ exports.getSpProfile = async (req, res) => {
         res.status(500).json({ message: "Error fetching user profile", error: error.message });
     }
 };
+
+// for Availabilty of service provider
+
+exports.updateAvailability = async (req, res) => {
+    const { isAvailable, servicePinCodes } = req.body;
+
+    try {
+        const user = await User.findById(req.user.id);
+        if (!user) return res.status(404).json({ message: "User not found" });
+
+        if (isAvailable) {
+            if (!servicePinCodes || servicePinCodes.length === 0) {
+                return res.status(400).json({ message: "Please provide at least one pincode" });
+            }
+            user.servicePinCodes = servicePinCodes;
+        } else {
+            user.servicePinCodes = [];
+        }
+
+        user.isAvailable = isAvailable;
+        user.lastUpdated = Date.now(); 
+        await user.save();
+
+        res.status(200).json({ message: "Availability updated", user });
+    } catch (error) {
+        res.status(500).json({ message: "Error updating availability", error: error.message });
+    }
+};
+
+
+exports.getAvailability = async (req, res) => {
+    try {
+        const user = await User.findById(req.user.id).select("isAvailable servicePinCodes");
+        if (!user) return res.status(404).json({ message: "User not found" });
+
+        res.status(200).json({ isAvailable: user.isAvailable, servicePinCodes: user.servicePinCodes });
+    } catch (error) {
+        res.status(500).json({ message: "Error fetching availability", error: error.message });
+    }
+};
+
+
