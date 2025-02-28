@@ -18,7 +18,7 @@ exports.registerServiceProvider = async (req, res) => {
             const profileImage = req.files["profileImage"] ? req.files["profileImage"][0].path : null;
             const aadharImage = req.files["aadharImage"] ? req.files["aadharImage"][0].path : null;
 
-            if (!name || !phone || !email || !password || !category || !price || !profileImage || !aadharImage) {
+            if (!name || !phone || !email || !password || !category || !price) {
                 return res.status(400).json({ message: "All fields are required" });
             }
             const salt = await bcrypt.genSalt(10);
