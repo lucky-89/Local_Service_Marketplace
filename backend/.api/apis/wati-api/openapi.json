@@ -1,0 +1,3530 @@
+{
+  "info": {
+    "title": "WhatsApp chat API",
+    "version": "v1"
+  },
+  "paths": {
+    "/api/v1/chatbots": {
+      "get": {
+        "tags": [
+          "Api"
+        ],
+        "summary": "Get existing chatbots",
+        "responses": {
+          "200": {
+            "content": {
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "name": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "created": {
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": true
+                      }
+                    },
+                    "additionalProperties": false
+                  }
+                }
+              },
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "name": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "created": {
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": true
+                      }
+                    },
+                    "additionalProperties": false
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "name": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "created": {
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": true
+                      }
+                    },
+                    "additionalProperties": false
+                  }
+                }
+              }
+            },
+            "description": "{\n  [\n    {\n      \"id\": \"string\",\n      \"name\": \"string\",\n      \"created\": \"2024-05-03T07:51:34.021Z\"\n\n    }\n  ]\n}\n"
+          }
+        },
+        "parameters": []
+      }
+    },
+    "/api/v1/getMedia": {
+      "get": {
+        "tags": [
+          "Api"
+        ],
+        "summary": "Get media by file name",
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        },
+        "parameters": [
+          {
+            "in": "query",
+            "name": "fileName",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "The Filename format should be full path. For example: data/images/c1d465a1-3cbf-4190-a936-1c2ddd63f057.jpg"
+          }
+        ]
+      }
+    },
+    "/api/v1/getContacts": {
+      "get": {
+        "tags": [
+          "Api"
+        ],
+        "summary": "Get Contacts List",
+        "responses": {
+          "200": {
+            "description": "{\n\"result\":\"success\"\n\"login_user_phone\":\"8477710xxxx\"\n}"
+          }
+        },
+        "parameters": [
+          {
+            "in": "query",
+            "name": "pageSize",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "description": "Page Size"
+          },
+          {
+            "in": "query",
+            "name": "pageNumber",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "description": "Page Number"
+          },
+          {
+            "in": "query",
+            "name": "name",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Contact Name"
+          },
+          {
+            "in": "query",
+            "name": "attribute",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Attribute (parameters format : [{name: \"name\", operator: \"contain\", value: \"test\"}] )<br />\r\nPossible values for operator are contain, notContain, exist, notExist, ==, !=, valid, invalid"
+          },
+          {
+            "in": "query",
+            "name": "createdDate",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Created Date (YYYY-MM-DD or MM-DD-YYYY)"
+          }
+        ]
+      }
+    },
+    "/api/v1/rotateToken": {
+      "post": {
+        "tags": [
+          "Api"
+        ],
+        "summary": "Rotate Token",
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        },
+        "parameters": [
+          {
+            "in": "query",
+            "name": "token",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "Token to block"
+          }
+        ]
+      }
+    },
+    "/api/v1/order_status": {
+      "post": {
+        "tags": [
+          "WhatsAppPayment"
+        ],
+        "summary": "Update WhatsApp Pay order status of an order (Private Beta)",
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        },
+        "parameters": []
+      }
+    },
+    "/api/v1/order_details": {
+      "post": {
+        "tags": [
+          "WhatsAppPayment"
+        ],
+        "summary": "Send WhatsApp Pay order detail message to customer (Private Beta)",
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        },
+        "parameters": []
+      }
+    },
+    "/api/v1/assignOperator": {
+      "post": {
+        "tags": [
+          "Api"
+        ],
+        "summary": "Assign User",
+        "responses": {
+          "200": {
+            "description": "{\n  \"result\": true\n}"
+          }
+        },
+        "parameters": [
+          {
+            "in": "query",
+            "name": "email",
+            "schema": {
+              "type": "string"
+            },
+            "description": "User Email (if Email is not specified, the chat will be assigned to the Bot)"
+          },
+          {
+            "in": "query",
+            "name": "whatsappNumber",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "WhatsApp Number with country code. Example, 85264318721"
+          }
+        ]
+      }
+    },
+    "/api/v1/chatbots/start": {
+      "post": {
+        "tags": [
+          "Api"
+        ],
+        "summary": "Start chatbot",
+        "responses": {
+          "200": {
+            "content": {
+              "text/json": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "description": "{\n  \"result\": true\n}"
+          }
+        },
+        "parameters": [
+          {
+            "in": "query",
+            "name": "whatsappNumber",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "WhatsApp Number with country code. Example, 85264318721"
+          },
+          {
+            "in": "query",
+            "name": "chatbotId",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "Chatbot Id"
+          }
+        ]
+      }
+    },
+    "/api/v1/updateChatStatus": {
+      "post": {
+        "tags": [
+          "Api"
+        ],
+        "summary": "Update Chat Status",
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        },
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "text/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "ticketStatus",
+                  "whatsappNumber"
+                ],
+                "properties": {
+                  "ticketStatus": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "whatsappNumber": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "ticketStatus",
+                  "whatsappNumber"
+                ],
+                "properties": {
+                  "ticketStatus": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "whatsappNumber": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "ticketStatus",
+                  "whatsappNumber"
+                ],
+                "properties": {
+                  "ticketStatus": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "whatsappNumber": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "application/json-patch+json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "ticketStatus",
+                  "whatsappNumber"
+                ],
+                "properties": {
+                  "ticketStatus": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "whatsappNumber": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "additionalProperties": false
+              }
+            }
+          },
+          "description": "<u>\r\n  <b>ChangeChatStatusRequestModel</b>\r\n</u>\r\n<br />\r\n<br />\r\n<b>TicketStatus:</b>\r\n<br /> allowed status types: <b>OPEN/SOLVED/PENDING/BLOCK</b><br />"
+        }
+      }
+    },
+    "/api/v1/getMessageTemplates": {
+      "get": {
+        "tags": [
+          "Api"
+        ],
+        "summary": "Get Message Templates",
+        "responses": {
+          "200": {
+            "description": "{\n   \"result\":\"success\",\n   \"messageTemplates\":[\n      {\n         \"id\":\"600ace94533bc08ac8e9a98c\",\n         \"elementName\":\"about_wati2\",\n         \"category\":\"AUTO_REPLY\",\n         \"hsm\":null,\n         \"hsmOriginal\":null,\n         \"status\":\"APPROVED\",\n         \"language\":{\n            \"key\":\"English (US)\",\n            \"value\":\"en_US\",\n            \"text\":\"English (US)\"\n         },\n         \"lastModified\":\"2021-01-22T13:10:01.637Z\",\n         \"type\":\"template\",\n         \"header\":null,\n         \"body\":\"We’re glad you want to know about WATI *{{1}}*\n\nYou can watch these demo videos to know more about our platforms\",\n         \"bodyOriginal\":\"We’re glad you want to know about WATI *{{name}}*\n\nYou can watch these demo videos to know more about our platforms\",\n         \"footer\":\"Press '0' to return to main menu\",\n         \"buttons\":[\n            {\n               \"type\":\"url\",\n               \"parameter\":{\n                  \"text\":\"Watch demo videos\",\n                  \"phoneNumber\":\"\",\n                  \"url\":\"http://bit.ly/WATI_Videos\",\n                  \"urlOriginal\":null,\n                  \"urlType\":\"static\",\n                  \"buttonParamMapping\":null\n               }\n            }\n         ],\n         \"buttonsType\":\"call_to_action\"\n      }\n   ],\n   \"link\":{\n      \"prevPage\":null,\n      \"nextPage\":null,\n      \"pageNumber\":1,\n      \"pageSize\":100,\n      \"total\":29\n   }\n}"
+          }
+        },
+        "parameters": [
+          {
+            "in": "query",
+            "name": "pageSize",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "description": "Page Size"
+          },
+          {
+            "in": "query",
+            "name": "pageNumber",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "description": "Page Number"
+          }
+        ]
+      }
+    },
+    "/api/v1/sendTemplateMessage": {
+      "post": {
+        "tags": [
+          "Api"
+        ],
+        "summary": "Send template message",
+        "responses": {
+          "200": {
+            "description": "{\n  \"result\": true,\n  \"phone_number\": \"8613842014706\",\n  \"template_name\": \"new_chat_v1\",\n  \"parameteres\": [\n  {\n  \"name\": \"name\",\n  \"value\": \"Matthew\"\n  }\n  ],\n  \"contact\": {\n  \"id\": \"5ff5b00e407553a45ee55b30\",\n  \"wAid\": \"8613842014706\",\n  \"firstName\": \"Rider Rapanzel\",\n  \"fullName\": \"Rider Rapanzel\",\n  \"phone\": \"8613842014706\",\n  \"source\": null,\n  \"contactStatus\": \"VALID\",\n  \"photo\": null,\n  \"created\": \"02-16-2021\",\n  \"tags\": [],\n  \"customParams\": [\n  {\n  \"name\": \"name\",\n  \"value\": \"Rider Rapanzel\"\n  },\n  {\n  \"name\": \"phone\",\n  \"value\": \"8613842014706\"\n  }\n  ],\n  \"optedIn\": false,\n  \"isDeleted\": false,\n  \"lastUpdated\": \"2021-02-16T11:23:11.684Z\",\n  \"allowBroadcast\": true,\n  \"allowSMS\": true,\n  \"teamIds\": [\n  \"5ff5b00ecb5074858d94a43f\"\n  ],\n  \"isInFlow\": false,\n  \"lastFlowId\": \"5fe32628ef6ffcb51df12100\",\n  \"currentFlowNodeId\": \"main_question-vpLMS\"\n  },\n  \"model\": {\n  \"ids\": [\n  \"5ff5b00e407553a45ee55b30\"\n  ]\n  },\n  \"validWhatsAppNumber\": true\n}"
+          }
+        },
+        "parameters": [
+          {
+            "in": "query",
+            "name": "whatsappNumber",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "WhatsApp Number with country code. Example, 85264318721"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "text/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "broadcast_name",
+                  "parameters",
+                  "template_name"
+                ],
+                "properties": {
+                  "parameters": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "required": [
+                        "name",
+                        "value"
+                      ],
+                      "properties": {
+                        "name": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "value": {
+                          "type": "string",
+                          "minLength": 1
+                        }
+                      },
+                      "additionalProperties": false
+                    }
+                  },
+                  "template_name": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "broadcast_name": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "broadcast_name",
+                  "parameters",
+                  "template_name"
+                ],
+                "properties": {
+                  "parameters": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "required": [
+                        "name",
+                        "value"
+                      ],
+                      "properties": {
+                        "name": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "value": {
+                          "type": "string",
+                          "minLength": 1
+                        }
+                      },
+                      "additionalProperties": false
+                    }
+                  },
+                  "template_name": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "broadcast_name": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "broadcast_name",
+                  "parameters",
+                  "template_name"
+                ],
+                "properties": {
+                  "parameters": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "required": [
+                        "name",
+                        "value"
+                      ],
+                      "properties": {
+                        "name": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "value": {
+                          "type": "string",
+                          "minLength": 1
+                        }
+                      },
+                      "additionalProperties": false
+                    }
+                  },
+                  "template_name": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "broadcast_name": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "application/json-patch+json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "broadcast_name",
+                  "parameters",
+                  "template_name"
+                ],
+                "properties": {
+                  "parameters": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "required": [
+                        "name",
+                        "value"
+                      ],
+                      "properties": {
+                        "name": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "value": {
+                          "type": "string",
+                          "minLength": 1
+                        }
+                      },
+                      "additionalProperties": false
+                    }
+                  },
+                  "template_name": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "broadcast_name": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "additionalProperties": false
+              }
+            }
+          },
+          "description": "WhatsAppSendTemplateRequest request"
+        }
+      }
+    },
+    "/api/v2/sendTemplateMessage": {
+      "post": {
+        "tags": [
+          "Api"
+        ],
+        "summary": "Send template message (Beta)",
+        "responses": {
+          "200": {
+            "description": "{\n  \"result\": true,\n  \"phone_number\": \"8613842014706\",\n  \"template_name\": \"new_chat_v1\",\n  \"parameteres\": [\n  {\n  \"name\": \"name\",\n  \"value\": \"Matthew\"\n  }\n  ],\n  \"contact\": {\n  \"id\": \"5ff5b00e407553a45ee55b30\",\n  \"wAid\": \"8613842014706\",\n  \"firstName\": \"Rider Rapanzel\",\n  \"fullName\": \"Rider Rapanzel\",\n  \"phone\": \"8613842014706\",\n  \"source\": null,\n  \"contactStatus\": \"VALID\",\n  \"photo\": null,\n  \"created\": \"02-16-2021\",\n  \"tags\": [],\n  \"customParams\": [\n  {\n  \"name\": \"name\",\n  \"value\": \"Rider Rapanzel\"\n  },\n  {\n  \"name\": \"phone\",\n  \"value\": \"8613842014706\"\n  }\n  ],\n  \"optedIn\": false,\n  \"isDeleted\": false,\n  \"lastUpdated\": \"2021-02-16T11:23:11.684Z\",\n  \"allowBroadcast\": true,\n  \"allowSMS\": true,\n  \"teamIds\": [\n  \"5ff5b00ecb5074858d94a43f\"\n  ],\n  \"isInFlow\": false,\n  \"lastFlowId\": \"5fe32628ef6ffcb51df12100\",\n  \"currentFlowNodeId\": \"main_question-vpLMS\"\n  },\n  \"model\": {\n  \"ids\": [\n  \"5ff5b00e407553a45ee55b30\"\n  ]\n  },\n  \"validWhatsAppNumber\": true\n}"
+          }
+        },
+        "parameters": [
+          {
+            "in": "query",
+            "name": "whatsappNumber",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "WhatsApp Number with country code. Example, 85264318721"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "text/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "broadcast_name",
+                  "parameters",
+                  "template_name"
+                ],
+                "properties": {
+                  "parameters": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "required": [
+                        "name",
+                        "value"
+                      ],
+                      "properties": {
+                        "name": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "value": {
+                          "type": "string",
+                          "minLength": 1
+                        }
+                      },
+                      "additionalProperties": false
+                    }
+                  },
+                  "template_name": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "broadcast_name": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "broadcast_name",
+                  "parameters",
+                  "template_name"
+                ],
+                "properties": {
+                  "parameters": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "required": [
+                        "name",
+                        "value"
+                      ],
+                      "properties": {
+                        "name": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "value": {
+                          "type": "string",
+                          "minLength": 1
+                        }
+                      },
+                      "additionalProperties": false
+                    }
+                  },
+                  "template_name": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "broadcast_name": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "broadcast_name",
+                  "parameters",
+                  "template_name"
+                ],
+                "properties": {
+                  "parameters": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "required": [
+                        "name",
+                        "value"
+                      ],
+                      "properties": {
+                        "name": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "value": {
+                          "type": "string",
+                          "minLength": 1
+                        }
+                      },
+                      "additionalProperties": false
+                    }
+                  },
+                  "template_name": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "broadcast_name": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "application/json-patch+json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "broadcast_name",
+                  "parameters",
+                  "template_name"
+                ],
+                "properties": {
+                  "parameters": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "required": [
+                        "name",
+                        "value"
+                      ],
+                      "properties": {
+                        "name": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "value": {
+                          "type": "string",
+                          "minLength": 1
+                        }
+                      },
+                      "additionalProperties": false
+                    }
+                  },
+                  "template_name": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "broadcast_name": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "additionalProperties": false
+              }
+            }
+          },
+          "description": "WhatsAppSendTemplateRequest request"
+        }
+      }
+    },
+    "/api/v1/sendTemplateMessages": {
+      "post": {
+        "tags": [
+          "Api"
+        ],
+        "summary": "Send template messages",
+        "responses": {
+          "200": {
+            "description": "{\n  \"result\": true,\n  \"errors\": {\n    \"error\": \"\",\n    \"invalidWhatsappNumbers\": [],\n    \"invalidCustomParameters\": []\n  }\n}\n"
+          }
+        },
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "text/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "broadcast_name",
+                  "receivers",
+                  "template_name"
+                ],
+                "properties": {
+                  "receivers": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "required": [
+                        "customParams",
+                        "whatsappNumber"
+                      ],
+                      "properties": {
+                        "customParams": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "name": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "value": {
+                                "type": "string",
+                                "nullable": true
+                              }
+                            },
+                            "additionalProperties": false
+                          }
+                        },
+                        "whatsappNumber": {
+                          "type": "string",
+                          "minLength": 1
+                        }
+                      },
+                      "additionalProperties": false
+                    }
+                  },
+                  "template_name": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "broadcast_name": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "broadcast_name",
+                  "receivers",
+                  "template_name"
+                ],
+                "properties": {
+                  "receivers": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "required": [
+                        "customParams",
+                        "whatsappNumber"
+                      ],
+                      "properties": {
+                        "customParams": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "name": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "value": {
+                                "type": "string",
+                                "nullable": true
+                              }
+                            },
+                            "additionalProperties": false
+                          }
+                        },
+                        "whatsappNumber": {
+                          "type": "string",
+                          "minLength": 1
+                        }
+                      },
+                      "additionalProperties": false
+                    }
+                  },
+                  "template_name": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "broadcast_name": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "broadcast_name",
+                  "receivers",
+                  "template_name"
+                ],
+                "properties": {
+                  "receivers": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "required": [
+                        "customParams",
+                        "whatsappNumber"
+                      ],
+                      "properties": {
+                        "customParams": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "name": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "value": {
+                                "type": "string",
+                                "nullable": true
+                              }
+                            },
+                            "additionalProperties": false
+                          }
+                        },
+                        "whatsappNumber": {
+                          "type": "string",
+                          "minLength": 1
+                        }
+                      },
+                      "additionalProperties": false
+                    }
+                  },
+                  "template_name": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "broadcast_name": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "application/json-patch+json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "broadcast_name",
+                  "receivers",
+                  "template_name"
+                ],
+                "properties": {
+                  "receivers": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "required": [
+                        "customParams",
+                        "whatsappNumber"
+                      ],
+                      "properties": {
+                        "customParams": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "name": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "value": {
+                                "type": "string",
+                                "nullable": true
+                              }
+                            },
+                            "additionalProperties": false
+                          }
+                        },
+                        "whatsappNumber": {
+                          "type": "string",
+                          "minLength": 1
+                        }
+                      },
+                      "additionalProperties": false
+                    }
+                  },
+                  "template_name": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "broadcast_name": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "additionalProperties": false
+              }
+            }
+          },
+          "description": "SendTemplatesRequestModel request"
+        }
+      }
+    },
+    "/api/v2/sendTemplateMessages": {
+      "post": {
+        "tags": [
+          "Api"
+        ],
+        "summary": "Send template messages (Beta)",
+        "responses": {
+          "200": {
+            "description": "{\n  \"result\": true,\n  \"errors\": {\n    \"error\": \"\",\n    \"invalidWhatsappNumbers\": [],\n    \"invalidCustomParameters\": []\n  }\n}\n"
+          }
+        },
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "text/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "broadcast_name",
+                  "receivers",
+                  "template_name"
+                ],
+                "properties": {
+                  "receivers": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "required": [
+                        "customParams",
+                        "whatsappNumber"
+                      ],
+                      "properties": {
+                        "customParams": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "name": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "value": {
+                                "type": "string",
+                                "nullable": true
+                              }
+                            },
+                            "additionalProperties": false
+                          }
+                        },
+                        "whatsappNumber": {
+                          "type": "string",
+                          "minLength": 1
+                        }
+                      },
+                      "additionalProperties": false
+                    }
+                  },
+                  "template_name": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "broadcast_name": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "broadcast_name",
+                  "receivers",
+                  "template_name"
+                ],
+                "properties": {
+                  "receivers": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "required": [
+                        "customParams",
+                        "whatsappNumber"
+                      ],
+                      "properties": {
+                        "customParams": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "name": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "value": {
+                                "type": "string",
+                                "nullable": true
+                              }
+                            },
+                            "additionalProperties": false
+                          }
+                        },
+                        "whatsappNumber": {
+                          "type": "string",
+                          "minLength": 1
+                        }
+                      },
+                      "additionalProperties": false
+                    }
+                  },
+                  "template_name": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "broadcast_name": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "broadcast_name",
+                  "receivers",
+                  "template_name"
+                ],
+                "properties": {
+                  "receivers": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "required": [
+                        "customParams",
+                        "whatsappNumber"
+                      ],
+                      "properties": {
+                        "customParams": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "name": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "value": {
+                                "type": "string",
+                                "nullable": true
+                              }
+                            },
+                            "additionalProperties": false
+                          }
+                        },
+                        "whatsappNumber": {
+                          "type": "string",
+                          "minLength": 1
+                        }
+                      },
+                      "additionalProperties": false
+                    }
+                  },
+                  "template_name": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "broadcast_name": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "application/json-patch+json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "broadcast_name",
+                  "receivers",
+                  "template_name"
+                ],
+                "properties": {
+                  "receivers": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "required": [
+                        "customParams",
+                        "whatsappNumber"
+                      ],
+                      "properties": {
+                        "customParams": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "name": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "value": {
+                                "type": "string",
+                                "nullable": true
+                              }
+                            },
+                            "additionalProperties": false
+                          }
+                        },
+                        "whatsappNumber": {
+                          "type": "string",
+                          "minLength": 1
+                        }
+                      },
+                      "additionalProperties": false
+                    }
+                  },
+                  "template_name": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "broadcast_name": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "additionalProperties": false
+              }
+            }
+          },
+          "description": "SendTemplatesRequestModel request"
+        }
+      }
+    },
+    "/api/v1/sendTemplateMessageCSV": {
+      "post": {
+        "tags": [
+          "Api"
+        ],
+        "summary": "Send template messages(CSV)",
+        "responses": {
+          "200": {
+            "description": "{\n  \"result\": \"success\",\n  \"template_name\": \"new_chat_v1\",\n  \"errors\": []\n}"
+          }
+        },
+        "parameters": [
+          {
+            "in": "query",
+            "name": "template_name",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "Defined in the Template Message under Broadcast"
+          },
+          {
+            "in": "query",
+            "name": "broadcast_name",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "Broadcast Name"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "whatsapp_numbers_csv"
+                ],
+                "properties": {
+                  "whatsapp_numbers_csv": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              },
+              "encoding": {
+                "whatsapp_numbers_csv": {
+                  "style": "form"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/sendInteractiveListMessage": {
+      "post": {
+        "tags": [
+          "Api"
+        ],
+        "summary": "Send Interactive List Message",
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        },
+        "parameters": [
+          {
+            "in": "query",
+            "name": "whatsappNumber",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "WhatsApp Number with country code. Example, 85264318721"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "text/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "body": {
+                    "type": "string",
+                    "nullable": true,
+                    "maxLength": 1024,
+                    "minLength": 0
+                  },
+                  "footer": {
+                    "type": "string",
+                    "nullable": true,
+                    "maxLength": 60,
+                    "minLength": 0
+                  },
+                  "header": {
+                    "type": "string",
+                    "nullable": true,
+                    "maxLength": 60,
+                    "minLength": 0
+                  },
+                  "sections": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "rows": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "title": {
+                                "type": "string",
+                                "nullable": true,
+                                "maxLength": 24,
+                                "minLength": 0
+                              },
+                              "description": {
+                                "type": "string",
+                                "nullable": true,
+                                "maxLength": 72,
+                                "minLength": 0
+                              }
+                            },
+                            "additionalProperties": false
+                          },
+                          "nullable": true
+                        },
+                        "title": {
+                          "type": "string",
+                          "nullable": true,
+                          "maxLength": 24,
+                          "minLength": 0
+                        }
+                      },
+                      "additionalProperties": false
+                    },
+                    "nullable": true
+                  },
+                  "buttonText": {
+                    "type": "string",
+                    "nullable": true
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "body": {
+                    "type": "string",
+                    "nullable": true,
+                    "maxLength": 1024,
+                    "minLength": 0
+                  },
+                  "footer": {
+                    "type": "string",
+                    "nullable": true,
+                    "maxLength": 60,
+                    "minLength": 0
+                  },
+                  "header": {
+                    "type": "string",
+                    "nullable": true,
+                    "maxLength": 60,
+                    "minLength": 0
+                  },
+                  "sections": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "rows": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "title": {
+                                "type": "string",
+                                "nullable": true,
+                                "maxLength": 24,
+                                "minLength": 0
+                              },
+                              "description": {
+                                "type": "string",
+                                "nullable": true,
+                                "maxLength": 72,
+                                "minLength": 0
+                              }
+                            },
+                            "additionalProperties": false
+                          },
+                          "nullable": true
+                        },
+                        "title": {
+                          "type": "string",
+                          "nullable": true,
+                          "maxLength": 24,
+                          "minLength": 0
+                        }
+                      },
+                      "additionalProperties": false
+                    },
+                    "nullable": true
+                  },
+                  "buttonText": {
+                    "type": "string",
+                    "nullable": true
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "body": {
+                    "type": "string",
+                    "nullable": true,
+                    "maxLength": 1024,
+                    "minLength": 0
+                  },
+                  "footer": {
+                    "type": "string",
+                    "nullable": true,
+                    "maxLength": 60,
+                    "minLength": 0
+                  },
+                  "header": {
+                    "type": "string",
+                    "nullable": true,
+                    "maxLength": 60,
+                    "minLength": 0
+                  },
+                  "sections": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "rows": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "title": {
+                                "type": "string",
+                                "nullable": true,
+                                "maxLength": 24,
+                                "minLength": 0
+                              },
+                              "description": {
+                                "type": "string",
+                                "nullable": true,
+                                "maxLength": 72,
+                                "minLength": 0
+                              }
+                            },
+                            "additionalProperties": false
+                          },
+                          "nullable": true
+                        },
+                        "title": {
+                          "type": "string",
+                          "nullable": true,
+                          "maxLength": 24,
+                          "minLength": 0
+                        }
+                      },
+                      "additionalProperties": false
+                    },
+                    "nullable": true
+                  },
+                  "buttonText": {
+                    "type": "string",
+                    "nullable": true
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "application/json-patch+json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "body": {
+                    "type": "string",
+                    "nullable": true,
+                    "maxLength": 1024,
+                    "minLength": 0
+                  },
+                  "footer": {
+                    "type": "string",
+                    "nullable": true,
+                    "maxLength": 60,
+                    "minLength": 0
+                  },
+                  "header": {
+                    "type": "string",
+                    "nullable": true,
+                    "maxLength": 60,
+                    "minLength": 0
+                  },
+                  "sections": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "rows": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "title": {
+                                "type": "string",
+                                "nullable": true,
+                                "maxLength": 24,
+                                "minLength": 0
+                              },
+                              "description": {
+                                "type": "string",
+                                "nullable": true,
+                                "maxLength": 72,
+                                "minLength": 0
+                              }
+                            },
+                            "additionalProperties": false
+                          },
+                          "nullable": true
+                        },
+                        "title": {
+                          "type": "string",
+                          "nullable": true,
+                          "maxLength": 24,
+                          "minLength": 0
+                        }
+                      },
+                      "additionalProperties": false
+                    },
+                    "nullable": true
+                  },
+                  "buttonText": {
+                    "type": "string",
+                    "nullable": true
+                  }
+                },
+                "additionalProperties": false
+              }
+            }
+          },
+          "description": "<u>\r\n  <b>InteractiveListMessage</b>\r\n</u>\r\n<br />\r\n<br />\r\n<b>Rows:</b>\r\n<br /> allowed count: <b>1-10</b><br /><b>Allowed characters length after mapping:</b><br />\r\n                header text: <b>60</b><br />\r\n                body text: <b>1024</b><br />\r\n                footer text: <b>60</b><br />\r\n                section title: <b>24</b><br />\r\n                row title: <b>24</b><br />\r\n                row description: <b>72</b><br />"
+        }
+      }
+    },
+    "/api/v1/addContact/{whatsappNumber}": {
+      "post": {
+        "tags": [
+          "Api"
+        ],
+        "summary": "Add Contact",
+        "responses": {
+          "200": {
+            "description": "{\n  \"result\": true,\n  \"contact\": {\n    \"id\": \"5ff5b00e407553a45ee55b30\",\n    \"wAid\": \"8613842014706\",\n    \"firstName\": \"string\",\n    \"fullName\": \"string\",\n    \"phone\": \"8613842014706\",\n    \"source\": null,\n    \"contactStatus\": \"VALID\",\n    \"photo\": null,\n    \"created\": \"02-16-2021\",\n    \"tags\": [],\n    \"customParams\": [\n      {\n        \"name\": \"name\",\n        \"value\": \"string\"\n      },\n      {\n        \"name\": \"phone\",\n        \"value\": \"8613842014706\"\n      },\n      {\n        \"name\": \"string\",\n        \"value\": \"string\"\n      }\n    ],\n    \"optedIn\": false,\n    \"isDeleted\": false,\n    \"lastUpdated\": \"2021-02-26T08:29:12.329Z\",\n    \"allowBroadcast\": true,\n    \"allowSMS\": true,\n    \"isInFlow\": false,\n    \"lastFlowId\": \"5fe32628ef6ffcb51df12100\",\n    \"currentFlowNodeId\": \"main_question-vpLMS\"\n  }\n}"
+          }
+        },
+        "parameters": [
+          {
+            "in": "path",
+            "name": "whatsappNumber",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "WhatsApp Number with country code. Example, 85264318721"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "text/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "nullable": true
+                  },
+                  "customParams": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "name": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "value": {
+                          "type": "string",
+                          "nullable": true
+                        }
+                      },
+                      "additionalProperties": false
+                    },
+                    "nullable": true
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "nullable": true
+                  },
+                  "customParams": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "name": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "value": {
+                          "type": "string",
+                          "nullable": true
+                        }
+                      },
+                      "additionalProperties": false
+                    },
+                    "nullable": true
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "nullable": true
+                  },
+                  "customParams": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "name": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "value": {
+                          "type": "string",
+                          "nullable": true
+                        }
+                      },
+                      "additionalProperties": false
+                    },
+                    "nullable": true
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "application/json-patch+json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "nullable": true
+                  },
+                  "customParams": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "name": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "value": {
+                          "type": "string",
+                          "nullable": true
+                        }
+                      },
+                      "additionalProperties": false
+                    },
+                    "nullable": true
+                  }
+                },
+                "additionalProperties": false
+              }
+            }
+          },
+          "description": "Contact Attributes"
+        }
+      }
+    },
+    "/api/v1/order_details/{referenceId}": {
+      "get": {
+        "tags": [
+          "WhatsAppPayment"
+        ],
+        "summary": "Get WhatsApp Pay order details of particular order (Private Beta)",
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        },
+        "parameters": [
+          {
+            "in": "path",
+            "name": "referenceId",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": ""
+          }
+        ]
+      }
+    },
+    "/api/v1/getMessages/{whatsappNumber}": {
+      "get": {
+        "tags": [
+          "Api"
+        ],
+        "summary": "Get Messages by whatsapp number",
+        "responses": {
+          "200": {
+            "description": "{\n  \"result\":\"success\",\n  \"messages\":{\n    \"items\":[\n      {\n        \"eventDescription\":\"The chat has been expired (after 24 hours of last received message)\",\n        \"type\":4,\n        \"actor\":NULL,\n        \"assignee\":NULL,\n        \"topicName\":NULL,\n        \"id\":\"5feadd58c61e58a75e156610\",\n        \"created\":\"2020-12-29T07:40:08.193Z\",\n        \"conversationId\":\"5fe2ca37de4316113abced4f\",\n        \"ticketId\":\"5fe98ac0a60dd2d9c79ee700\",\n        \"eventType\":\"ticket\"\n      }\n    ],\n    \"pageNumber\":1,\n    \"pageSize\":100,\n    \"convCount\":0,\n    \"total\":25,\n    \"grandTotal\":0,\n    \"orderBy\":NULL,\n    \"lastId\":NULL,\n    \"sortBy\":0,\n    \"filters\":NULL,\n    \"allowFilters\":NULL,\n    \"search\":NULL\n  },\n  \"link\":{\n    \"prevPage\":NULL,\n    \"nextPage\":NULL\n  }\n}"
+          }
+        },
+        "parameters": [
+          {
+            "in": "path",
+            "name": "whatsappNumber",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "WhatsApp Number with country code. Example, 85264318721"
+          },
+          {
+            "in": "query",
+            "name": "pageSize",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "description": "Page Size"
+          },
+          {
+            "in": "query",
+            "name": "pageNumber",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "description": "Page Number"
+          }
+        ]
+      }
+    },
+    "/api/v1/payment_status/{referenceId}": {
+      "get": {
+        "tags": [
+          "WhatsAppPayment"
+        ],
+        "summary": "Get payment status information of particular order (Private Beta)",
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        },
+        "parameters": [
+          {
+            "in": "path",
+            "name": "referenceId",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": ""
+          }
+        ]
+      }
+    },
+    "/api/v1/sendInteractiveButtonsMessage": {
+      "post": {
+        "tags": [
+          "Api"
+        ],
+        "summary": "Send Interactive Buttons Message",
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        },
+        "parameters": [
+          {
+            "in": "query",
+            "name": "whatsappNumber",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "WhatsApp Number with country code. Example, 85264318721"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "text/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "body": {
+                    "type": "string",
+                    "nullable": true,
+                    "maxLength": 1024,
+                    "minLength": 0
+                  },
+                  "footer": {
+                    "type": "string",
+                    "nullable": true,
+                    "maxLength": 60,
+                    "minLength": 0
+                  },
+                  "header": {
+                    "type": "object",
+                    "properties": {
+                      "text": {
+                        "type": "string",
+                        "nullable": true,
+                        "maxLength": 60,
+                        "minLength": 0
+                      },
+                      "type": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "media": {
+                        "type": "object",
+                        "properties": {
+                          "url": {
+                            "type": "string",
+                            "nullable": true
+                          },
+                          "fileName": {
+                            "type": "string",
+                            "nullable": true
+                          }
+                        },
+                        "additionalProperties": false
+                      }
+                    },
+                    "additionalProperties": false
+                  },
+                  "buttons": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "text": {
+                          "type": "string",
+                          "nullable": true,
+                          "maxLength": 20,
+                          "minLength": 0
+                        }
+                      },
+                      "additionalProperties": false
+                    },
+                    "nullable": true
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "body": {
+                    "type": "string",
+                    "nullable": true,
+                    "maxLength": 1024,
+                    "minLength": 0
+                  },
+                  "footer": {
+                    "type": "string",
+                    "nullable": true,
+                    "maxLength": 60,
+                    "minLength": 0
+                  },
+                  "header": {
+                    "type": "object",
+                    "properties": {
+                      "text": {
+                        "type": "string",
+                        "nullable": true,
+                        "maxLength": 60,
+                        "minLength": 0
+                      },
+                      "type": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "media": {
+                        "type": "object",
+                        "properties": {
+                          "url": {
+                            "type": "string",
+                            "nullable": true
+                          },
+                          "fileName": {
+                            "type": "string",
+                            "nullable": true
+                          }
+                        },
+                        "additionalProperties": false
+                      }
+                    },
+                    "additionalProperties": false
+                  },
+                  "buttons": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "text": {
+                          "type": "string",
+                          "nullable": true,
+                          "maxLength": 20,
+                          "minLength": 0
+                        }
+                      },
+                      "additionalProperties": false
+                    },
+                    "nullable": true
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "body": {
+                    "type": "string",
+                    "nullable": true,
+                    "maxLength": 1024,
+                    "minLength": 0
+                  },
+                  "footer": {
+                    "type": "string",
+                    "nullable": true,
+                    "maxLength": 60,
+                    "minLength": 0
+                  },
+                  "header": {
+                    "type": "object",
+                    "properties": {
+                      "text": {
+                        "type": "string",
+                        "nullable": true,
+                        "maxLength": 60,
+                        "minLength": 0
+                      },
+                      "type": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "media": {
+                        "type": "object",
+                        "properties": {
+                          "url": {
+                            "type": "string",
+                            "nullable": true
+                          },
+                          "fileName": {
+                            "type": "string",
+                            "nullable": true
+                          }
+                        },
+                        "additionalProperties": false
+                      }
+                    },
+                    "additionalProperties": false
+                  },
+                  "buttons": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "text": {
+                          "type": "string",
+                          "nullable": true,
+                          "maxLength": 20,
+                          "minLength": 0
+                        }
+                      },
+                      "additionalProperties": false
+                    },
+                    "nullable": true
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "application/json-patch+json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "body": {
+                    "type": "string",
+                    "nullable": true,
+                    "maxLength": 1024,
+                    "minLength": 0
+                  },
+                  "footer": {
+                    "type": "string",
+                    "nullable": true,
+                    "maxLength": 60,
+                    "minLength": 0
+                  },
+                  "header": {
+                    "type": "object",
+                    "properties": {
+                      "text": {
+                        "type": "string",
+                        "nullable": true,
+                        "maxLength": 60,
+                        "minLength": 0
+                      },
+                      "type": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "media": {
+                        "type": "object",
+                        "properties": {
+                          "url": {
+                            "type": "string",
+                            "nullable": true
+                          },
+                          "fileName": {
+                            "type": "string",
+                            "nullable": true
+                          }
+                        },
+                        "additionalProperties": false
+                      }
+                    },
+                    "additionalProperties": false
+                  },
+                  "buttons": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "text": {
+                          "type": "string",
+                          "nullable": true,
+                          "maxLength": 20,
+                          "minLength": 0
+                        }
+                      },
+                      "additionalProperties": false
+                    },
+                    "nullable": true
+                  }
+                },
+                "additionalProperties": false
+              }
+            }
+          },
+          "description": "<u>\r\n  <b>InteractiveButtonsMessage</b>\r\n</u>\r\n<br />\r\n<br />\r\n<b>Header:</b>\r\n<br />\r\n                {<br />\r\n                  \"type\": \"<b>Text</b> or <b>Video</b> or <b>Image</b> or <b>Document</b>\",<br />\r\n                  \"text\":\"header text for type <b>Text</b>\",<br />\r\n                  \"media\": {<br />\r\n                        \"url\":\"https://...\", // (media obj should be not empty for non <b>Text</b> types)<br />\r\n                        \"fileName\": \"MyDoc.pdf\"} // (this field is only <b>Document</b> type) <br />\r\n                }<br /><b>Buttons:</b><br /> allowed count: <b>1-3</b><br /><b>Allowed characters length after mapping:</b><br />\r\n                header text: <b>60</b><br />\r\n                body text: <b>1024</b><br />\r\n                footer text: <b>60</b><br />\r\n                button's text: <b>20</b><br />"
+        }
+      }
+    },
+    "/api/v1/sendSessionFile/{whatsappNumber}": {
+      "post": {
+        "tags": [
+          "Api"
+        ],
+        "summary": "Send File to opened session",
+        "responses": {
+          "200": {
+            "description": "{\n  \"ok\": true,\n  \"result\": \"success\",\n  \"message\": {\n    \"whatsappMessageId\": \"gBGHhhOEIBRwbwIJ4Y4LvP6dYdfM\",\n    \"localMessageId\": null,\n    \"text\": \"/data/images/f2a325cf-60e5-4790-867a-fbe93a56261a.png\",\n    \"media\": {\n      \"id\": \"e112dde3-80a5-4c71-8101-9d2d2fa3e3d7\",\n      \"mimeType\": \"image/png\",\n      \"caption\": \"123\"\n    },\n    \"messageContact\": null,\n    \"location\": null,\n    \"type\": \"image\",\n    \"time\": \"1614328020\",\n    \"status\": 1,\n    \"statusString\": null,\n    \"isOwner\": true,\n    \"isUnread\": false,\n    \"ticketId\": \"6038afabf526cf7339d4349c\",\n    \"avatarUrl\": null,\n    \"assignedId\": \"5fb487bbde05a0f033a4483d\",\n    \"operatorName\": \"Nhi Luong\",\n    \"replyContextId\": null,\n    \"sourceType\": 0,\n    \"id\": \"6038b0d5f526cf7339d43592\",\n    \"created\": \"2021-02-26T08:27:00.1552798Z\",\n    \"conversationId\": \"5ffba8938355f1d6f56d4b62\"\n  }\n}"
+          }
+        },
+        "parameters": [
+          {
+            "in": "path",
+            "name": "whatsappNumber",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "WhatsApp Number with country code. Example, 85264318721"
+          },
+          {
+            "in": "query",
+            "name": "caption",
+            "schema": {
+              "type": "string"
+            },
+            "description": "(optional)"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "file"
+                ],
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              },
+              "encoding": {
+                "file": {
+                  "style": "form"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/sendSessionMessage/{whatsappNumber}": {
+      "post": {
+        "tags": [
+          "Api"
+        ],
+        "summary": "Send Message to opened session",
+        "responses": {
+          "200": {
+            "description": "{\n  \"ok\": true,\n  \"result\": \"success\",\n  \"message\": {\n    \"whatsappMessageId\": \"gBGHhhOEIBRwbwIJmv6AGHQ-L22Y\",\n    \"localMessageId\": null,\n    \"text\": \"Hi\",\n    \"media\": null,\n    \"messageContact\": null,\n    \"location\": null,\n    \"type\": \"text\",\n    \"time\": \"1614328073\",\n    \"status\": 1,\n    \"statusString\": null,\n    \"isOwner\": true,\n    \"isUnread\": false,\n    \"ticketId\": \"6038afabf526cf7339d4349c\",\n    \"avatarUrl\": null,\n    \"assignedId\": null,\n    \"operatorName\": null,\n    \"replyContextId\": null,\n    \"sourceType\": 0,\n    \"id\": \"6038b109f526cf7339d435b4\",\n    \"created\": \"2021-02-26T08:27:53.3393727Z\",\n    \"conversationId\": \"5ffba8938355f1d6f56d4b62\"\n  }\n}"
+          }
+        },
+        "parameters": [
+          {
+            "in": "path",
+            "name": "whatsappNumber",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "WhatsApp Number with country code. Example, 85264318721"
+          },
+          {
+            "in": "query",
+            "name": "messageText",
+            "schema": {
+              "type": "string",
+              "maxLength": 4096,
+              "minLength": 0
+            },
+            "required": true,
+            "description": "Message to send"
+          }
+        ]
+      }
+    },
+    "/api/v1/updateContactAttributesForMultiContacts": {
+      "post": {
+        "tags": [
+          "Api"
+        ],
+        "summary": "Update Contact Attributes",
+        "responses": {
+          "200": {
+            "description": "{\n  \"result\": true\n}"
+          }
+        },
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "text/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "contacts"
+                ],
+                "properties": {
+                  "contacts": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "required": [
+                        "customParams",
+                        "whatsappNumber"
+                      ],
+                      "properties": {
+                        "customParams": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "name": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "value": {
+                                "type": "string",
+                                "nullable": true
+                              }
+                            },
+                            "additionalProperties": false
+                          }
+                        },
+                        "whatsappNumber": {
+                          "type": "string",
+                          "minLength": 1
+                        }
+                      },
+                      "additionalProperties": false
+                    }
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "contacts"
+                ],
+                "properties": {
+                  "contacts": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "required": [
+                        "customParams",
+                        "whatsappNumber"
+                      ],
+                      "properties": {
+                        "customParams": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "name": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "value": {
+                                "type": "string",
+                                "nullable": true
+                              }
+                            },
+                            "additionalProperties": false
+                          }
+                        },
+                        "whatsappNumber": {
+                          "type": "string",
+                          "minLength": 1
+                        }
+                      },
+                      "additionalProperties": false
+                    }
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "contacts"
+                ],
+                "properties": {
+                  "contacts": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "required": [
+                        "customParams",
+                        "whatsappNumber"
+                      ],
+                      "properties": {
+                        "customParams": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "name": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "value": {
+                                "type": "string",
+                                "nullable": true
+                              }
+                            },
+                            "additionalProperties": false
+                          }
+                        },
+                        "whatsappNumber": {
+                          "type": "string",
+                          "minLength": 1
+                        }
+                      },
+                      "additionalProperties": false
+                    }
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "application/json-patch+json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "contacts"
+                ],
+                "properties": {
+                  "contacts": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "required": [
+                        "customParams",
+                        "whatsappNumber"
+                      ],
+                      "properties": {
+                        "customParams": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "name": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "value": {
+                                "type": "string",
+                                "nullable": true
+                              }
+                            },
+                            "additionalProperties": false
+                          }
+                        },
+                        "whatsappNumber": {
+                          "type": "string",
+                          "minLength": 1
+                        }
+                      },
+                      "additionalProperties": false
+                    }
+                  }
+                },
+                "additionalProperties": false
+              }
+            }
+          },
+          "description": "Collection of WhatsappPhoneNumber with Contact Attributes"
+        }
+      }
+    },
+    "/api/v1/updateContactAttributes/{whatsappNumber}": {
+      "post": {
+        "tags": [
+          "Api"
+        ],
+        "summary": "Update Contact Attributes",
+        "responses": {
+          "200": {
+            "description": "{\n  \"result\": true\n}"
+          }
+        },
+        "parameters": [
+          {
+            "in": "path",
+            "name": "whatsappNumber",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "WhatsApp Number with country code. Example, 85264318721"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "text/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "customParams": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "name": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "value": {
+                          "type": "string",
+                          "nullable": true
+                        }
+                      },
+                      "additionalProperties": false
+                    },
+                    "nullable": true
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "customParams": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "name": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "value": {
+                          "type": "string",
+                          "nullable": true
+                        }
+                      },
+                      "additionalProperties": false
+                    },
+                    "nullable": true
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "customParams": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "name": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "value": {
+                          "type": "string",
+                          "nullable": true
+                        }
+                      },
+                      "additionalProperties": false
+                    },
+                    "nullable": true
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "application/json-patch+json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "customParams": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "name": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "value": {
+                          "type": "string",
+                          "nullable": true
+                        }
+                      },
+                      "additionalProperties": false
+                    },
+                    "nullable": true
+                  }
+                },
+                "additionalProperties": false
+              }
+            }
+          },
+          "description": "Contact Attributes"
+        }
+      }
+    }
+  },
+  "openapi": "3.0.1",
+  "servers": [
+    {
+      "url": "{WATI_API_ENDPOINT}"
+    }
+  ],
+  "security": [
+    {
+      "Bearer": []
+    }
+  ],
+  "components": {
+    "schemas": {
+      "SourceType": {
+        "enum": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11
+        ],
+        "type": "integer",
+        "format": "int32"
+      },
+      "CustomParam": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "value": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ListMessage": {
+        "type": "object",
+        "properties": {
+          "body": {
+            "type": "string",
+            "nullable": true,
+            "maxLength": 1024,
+            "minLength": 0
+          },
+          "footer": {
+            "type": "string",
+            "nullable": true,
+            "maxLength": 60,
+            "minLength": 0
+          },
+          "header": {
+            "type": "string",
+            "nullable": true,
+            "maxLength": 60,
+            "minLength": 0
+          },
+          "sections": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "rows": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "title": {
+                        "type": "string",
+                        "nullable": true,
+                        "maxLength": 24,
+                        "minLength": 0
+                      },
+                      "description": {
+                        "type": "string",
+                        "nullable": true,
+                        "maxLength": 72,
+                        "minLength": 0
+                      }
+                    },
+                    "additionalProperties": false
+                  },
+                  "nullable": true
+                },
+                "title": {
+                  "type": "string",
+                  "nullable": true,
+                  "maxLength": 24,
+                  "minLength": 0
+                }
+              },
+              "additionalProperties": false
+            },
+            "nullable": true
+          },
+          "buttonText": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ButtonsMessage": {
+        "type": "object",
+        "properties": {
+          "body": {
+            "type": "string",
+            "nullable": true,
+            "maxLength": 1024,
+            "minLength": 0
+          },
+          "footer": {
+            "type": "string",
+            "nullable": true,
+            "maxLength": 60,
+            "minLength": 0
+          },
+          "header": {
+            "type": "object",
+            "properties": {
+              "text": {
+                "type": "string",
+                "nullable": true,
+                "maxLength": 60,
+                "minLength": 0
+              },
+              "type": {
+                "type": "string",
+                "nullable": true
+              },
+              "media": {
+                "type": "object",
+                "properties": {
+                  "url": {
+                    "type": "string",
+                    "nullable": true
+                  },
+                  "fileName": {
+                    "type": "string",
+                    "nullable": true
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "additionalProperties": false
+          },
+          "buttons": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "text": {
+                  "type": "string",
+                  "nullable": true,
+                  "maxLength": 20,
+                  "minLength": 0
+                }
+              },
+              "additionalProperties": false
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "NewContactModel": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "customParams": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "value": {
+                  "type": "string",
+                  "nullable": true
+                }
+              },
+              "additionalProperties": false
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ParametersModel": {
+        "type": "object",
+        "required": [
+          "name",
+          "value"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "value": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "additionalProperties": false
+      },
+      "ChatbotApiResult": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "nullable": true
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "created": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "TemplateReceiver": {
+        "type": "object",
+        "required": [
+          "customParams",
+          "whatsappNumber"
+        ],
+        "properties": {
+          "customParams": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "value": {
+                  "type": "string",
+                  "nullable": true
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "whatsappNumber": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "additionalProperties": false
+      },
+      "FacebookPaginator": {
+        "type": "object",
+        "properties": {
+          "cursors": {
+            "type": "object",
+            "properties": {
+              "after": {
+                "type": "string",
+                "nullable": true
+              },
+              "before": {
+                "type": "string",
+                "nullable": true
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "additionalProperties": false
+      },
+      "ListMessageSection": {
+        "type": "object",
+        "properties": {
+          "rows": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "title": {
+                  "type": "string",
+                  "nullable": true,
+                  "maxLength": 24,
+                  "minLength": 0
+                },
+                "description": {
+                  "type": "string",
+                  "nullable": true,
+                  "maxLength": 72,
+                  "minLength": 0
+                }
+              },
+              "additionalProperties": false
+            },
+            "nullable": true
+          },
+          "title": {
+            "type": "string",
+            "nullable": true,
+            "maxLength": 24,
+            "minLength": 0
+          }
+        },
+        "additionalProperties": false
+      },
+      "FacebookPageAccount": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "nullable": true
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "access_token": {
+            "type": "string",
+            "nullable": true
+          },
+          "connected_instagram_account": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "nullable": true
+              },
+              "name": {
+                "type": "string",
+                "nullable": true
+              },
+              "ig_id": {
+                "type": "integer",
+                "format": "int64"
+              },
+              "username": {
+                "type": "string",
+                "nullable": true
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "additionalProperties": false
+      },
+      "ButtonsMessageHeader": {
+        "type": "object",
+        "properties": {
+          "text": {
+            "type": "string",
+            "nullable": true,
+            "maxLength": 60,
+            "minLength": 0
+          },
+          "type": {
+            "type": "string",
+            "nullable": true
+          },
+          "media": {
+            "type": "object",
+            "properties": {
+              "url": {
+                "type": "string",
+                "nullable": true
+              },
+              "fileName": {
+                "type": "string",
+                "nullable": true
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "additionalProperties": false
+      },
+      "FacebookAuthResponse": {
+        "type": "object",
+        "properties": {
+          "userID": {
+            "type": "string",
+            "nullable": true
+          },
+          "expiresIn": {
+            "type": "string",
+            "nullable": true
+          },
+          "accessToken": {
+            "type": "string",
+            "nullable": true
+          },
+          "data_access_expiration_time": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "FacebookPageAccounts": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "name": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "access_token": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "connected_instagram_account": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "name": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "ig_id": {
+                      "type": "integer",
+                      "format": "int64"
+                    },
+                    "username": {
+                      "type": "string",
+                      "nullable": true
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              },
+              "additionalProperties": false
+            },
+            "nullable": true
+          },
+          "paging": {
+            "type": "object",
+            "properties": {
+              "cursors": {
+                "type": "object",
+                "properties": {
+                  "after": {
+                    "type": "string",
+                    "nullable": true
+                  },
+                  "before": {
+                    "type": "string",
+                    "nullable": true
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "additionalProperties": false
+      },
+      "ButtonsMessageButtons": {
+        "type": "object",
+        "properties": {
+          "text": {
+            "type": "string",
+            "nullable": true,
+            "maxLength": 20,
+            "minLength": 0
+          }
+        },
+        "additionalProperties": false
+      },
+      "ListMessageSectionRow": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "nullable": true,
+            "maxLength": 24,
+            "minLength": 0
+          },
+          "description": {
+            "type": "string",
+            "nullable": true,
+            "maxLength": 72,
+            "minLength": 0
+          }
+        },
+        "additionalProperties": false
+      },
+      "ContactWithCustomParams": {
+        "type": "object",
+        "required": [
+          "customParams",
+          "whatsappNumber"
+        ],
+        "properties": {
+          "customParams": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "value": {
+                  "type": "string",
+                  "nullable": true
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "whatsappNumber": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "additionalProperties": false
+      },
+      "FacebookCursorPaginator": {
+        "type": "object",
+        "properties": {
+          "after": {
+            "type": "string",
+            "nullable": true
+          },
+          "before": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "InstagramServiceSetting": {
+        "type": "object",
+        "properties": {
+          "igId": {
+            "type": "string",
+            "nullable": true
+          },
+          "enabled": {
+            "type": "boolean"
+          },
+          "fbPageId": {
+            "type": "string",
+            "nullable": true
+          },
+          "tenantId": {
+            "type": "string",
+            "nullable": true
+          },
+          "accessToken": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "UpdateCustomParamsModel": {
+        "type": "object",
+        "properties": {
+          "customParams": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "value": {
+                  "type": "string",
+                  "nullable": true
+                }
+              },
+              "additionalProperties": false
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "FacebookInstagramAccount": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "nullable": true
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "ig_id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "username": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ButtonsMessageHeaderMedia": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string",
+            "nullable": true
+          },
+          "fileName": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "SendTemplatesRequestModel": {
+        "type": "object",
+        "required": [
+          "broadcast_name",
+          "receivers",
+          "template_name"
+        ],
+        "properties": {
+          "receivers": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "customParams",
+                "whatsappNumber"
+              ],
+              "properties": {
+                "customParams": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "value": {
+                        "type": "string",
+                        "nullable": true
+                      }
+                    },
+                    "additionalProperties": false
+                  }
+                },
+                "whatsappNumber": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "template_name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "broadcast_name": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "additionalProperties": false
+      },
+      "WASendTemplateRequestModel": {
+        "type": "object",
+        "required": [
+          "broadcast_name",
+          "parameters",
+          "template_name"
+        ],
+        "properties": {
+          "parameters": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "name",
+                "value"
+              ],
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "value": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "template_name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "broadcast_name": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "additionalProperties": false
+      },
+      "ChangeChatStatusRequestModel": {
+        "type": "object",
+        "required": [
+          "ticketStatus",
+          "whatsappNumber"
+        ],
+        "properties": {
+          "ticketStatus": {
+            "type": "string",
+            "minLength": 1
+          },
+          "whatsappNumber": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "additionalProperties": false
+      },
+      "FacebookUserWithPageResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "nullable": true
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "accounts": {
+            "type": "object",
+            "properties": {
+              "data": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "name": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "access_token": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "connected_instagram_account": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "name": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "ig_id": {
+                          "type": "integer",
+                          "format": "int64"
+                        },
+                        "username": {
+                          "type": "string",
+                          "nullable": true
+                        }
+                      },
+                      "additionalProperties": false
+                    }
+                  },
+                  "additionalProperties": false
+                },
+                "nullable": true
+              },
+              "paging": {
+                "type": "object",
+                "properties": {
+                  "cursors": {
+                    "type": "object",
+                    "properties": {
+                      "after": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "before": {
+                        "type": "string",
+                        "nullable": true
+                      }
+                    },
+                    "additionalProperties": false
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "additionalProperties": false
+      },
+      "UpdateCustomParamsModelForContacts": {
+        "type": "object",
+        "required": [
+          "contacts"
+        ],
+        "properties": {
+          "contacts": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "customParams",
+                "whatsappNumber"
+              ],
+              "properties": {
+                "customParams": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "value": {
+                        "type": "string",
+                        "nullable": true
+                      }
+                    },
+                    "additionalProperties": false
+                  }
+                },
+                "whatsappNumber": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "additionalProperties": false
+            }
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "securitySchemes": {
+      "Bearer": {
+        "in": "header",
+        "name": "Authorization",
+        "type": "apiKey",
+        "description": "Enter 'Bearer' [space] and then your token in the text input below.\n                      Example: 'Bearer 12345abcdef'"
+      }
+    }
+  },
+  "x-samples-languages": [
+    "curl",
+    "python",
+    "go",
+    "node",
+    "php",
+    "java",
+    "csharp"
+  ]
+}

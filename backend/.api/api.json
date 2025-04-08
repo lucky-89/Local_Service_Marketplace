@@ -1,0 +1,11 @@
+{
+  "version": "1.0",
+  "apis": [
+    {
+      "identifier": "wati-api",
+      "source": "@wati-api/v1.1.2#1fc7ozd2flwesvyps",
+      "integrity": "sha512-4p6CFAiK3aCSydiEXJe9l7CDHyu+8epGe2D/QIe/zJLQyGQZ4SqXmc3c28EdTegChqjn13NONQdiRHQmE2Rnnw==",
+      "installerVersion": "6.1.3"
+    }
+  ]
+}

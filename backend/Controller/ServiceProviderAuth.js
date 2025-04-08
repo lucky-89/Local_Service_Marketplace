@@ -2,7 +2,7 @@ const User = require('../Model/Service_ProviderModel');
 const express = require("express");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-
+const Client=require('../Model/ClientModel');
 const upload = require("../uploadMiddleware");
 
 const router = express.Router();
@@ -130,4 +130,35 @@ exports.getAvailability = async (req, res) => {
     }
 };
 
+exports.updateBookingStatus = async (req, res) => {
+    try {
+        const { bookingId } = req.params;
+        const { status } = req.body;
+        const serviceProviderId = req.user.id;
 
+       
+        const validStatuses = ['Pending', 'Confirmed', 'Completed'];
+        if (!validStatuses.includes(status)) {
+            return res.status(400).json({ message: 'Invalid status value' });
+        }
+
+        const result = await Client.findOneAndUpdate(
+            {
+                "bookings._id": bookingId,
+                "bookings.serviceProviderId": serviceProviderId
+            },
+            {
+                $set: { "bookings.$.status": status }
+            },
+            { new: true }
+        );
+
+        if (!result) {
+            return res.status(404).json({ message: 'Booking not found or unauthorized' });
+        }
+
+        res.status(200).json({ message: 'Booking status updated successfully' });
+    } catch (error) {
+        res.status(500).json({ message: 'Error updating booking status', error: error.message });
+    }
+};
