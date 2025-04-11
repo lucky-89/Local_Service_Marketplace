@@ -3,11 +3,11 @@ const OTP = require('../Model/OTPModel');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const sgMail = require('@sendgrid/mail');
-sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+
+
+
 const ServiceProvider=require("../Model/Service_ProviderModel")
 
-
-// Registration with OTP
 exports.registerUser = async (req, res) => {
     try {
         const { name, phone, email, password } = req.body;
@@ -31,6 +31,7 @@ exports.registerUser = async (req, res) => {
             isVerified: false
         });
 
+        sgMail.setApiKey(process.env.SENDGRID_API_KEY);
         const msg = {
             to: email,
             from: {
@@ -106,6 +107,7 @@ exports.resendOtp = async (req, res) => {
 
         await OTP.create({ email, otp: newOtp });
 
+        sgMail.setApiKey(process.env.SENDGRID_API_KEY);
         const msg = {
             to: email,
             from: {
@@ -251,8 +253,18 @@ exports.bookServiceProvider = async (req, res) => {
         client.bookings.push(booking);
         await client.save();
 
-      
-        
+        sgMail.setApiKey(process.env.SENDGRID_API_KEY1);
+        const msg = {
+            to: serviceProvider.email,
+            from: {
+                email: process.env.SENDER_EMAIL1,
+                name: "Local Service Markateplace"
+            },
+            subject: 'Booking Confirmation',
+            html: `<h1>You are booked by Name:${client.name}</h1><p>Email:${client.email}</p><p>Mobile no: ${client.phone}</p><p>Service Location:${booking.serviceLocation}</p><p>Please Confirm the booking</p>`
+        };
+
+        await sgMail.send(msg);
 
         res.status(200).json({ message: "Service Provider booked successfully", booking });
 

@@ -3,7 +3,7 @@ const express = require("express");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const Client=require('../Model/ClientModel');
-const upload = require("../uploadMiddleware");
+
 
 const router = express.Router();
 
@@ -11,18 +11,16 @@ const router = express.Router();
 
 exports.registerServiceProvider = async (req, res) => {
     try {
-        upload.fields([{ name: "profileImage" }, { name: "aadharImage" }])(req, res, async (err) => {
-            if (err) return res.status(400).json({ message: "Image Upload Error", error: err });
+        const { name, phone, email, password, category, price, profileImage, aadharImage, flag } = req.body;
 
-            const { name, phone, email, password, category, price, flag } = req.body;
-            const profileImage = req.files["profileImage"] ? req.files["profileImage"][0].path : null;
-            const aadharImage = req.files["aadharImage"] ? req.files["aadharImage"][0].path : null;
+     
+        if (!name || !phone || !email || !password || !category || !price ) {
+            return res.status(400).json({ message: "All fields are required" });
+        }
 
-            if (!name || !phone || !email || !password || !category || !price) {
-                return res.status(400).json({ message: "All fields are required" });
-            }
-            const salt = await bcrypt.genSalt(10);
-            const hashedPassword = await bcrypt.hash(password, salt);
+   
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(password, salt);
 
             let isVerified=false;
             if(flag==1){
@@ -38,9 +36,8 @@ exports.registerServiceProvider = async (req, res) => {
             else{
                 res.status(201).json({ message: "User registered unsuccessful please provide the same user profile image and adhar image", isVerified });
             }
-
             
-        });
+      
     } catch (error) {
         console.error("Registration error:", error);
         res.status(500).json({ message: "Internal Server Error" });
@@ -129,6 +126,7 @@ exports.getAvailability = async (req, res) => {
         res.status(500).json({ message: "Error fetching availability", error: error.message });
     }
 };
+
 
 exports.updateBookingStatus = async (req, res) => {
     try {
