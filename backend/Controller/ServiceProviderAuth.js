@@ -87,6 +87,30 @@ exports.getSpProfile = async (req, res) => {
     }
 };
 
+exports.updateSpProfile = async (req, res) => {
+    try {
+        const { name, phone, email, category, price, profileImage} = req.body;
+
+        const user = await User.findById(req.user.id);
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+        
+        if (name) user.name = name;
+        if (phone) user.phone = phone;
+        if (email) user.email = email;
+        if (category) user.category = category;
+        if (price) user.price = price;
+        if (profileImage) user.profileImage = profileImage;
+
+        await user.save();
+
+        res.status(200).json({ message: "Profile updated successfully", user });
+    } catch (error) {
+        res.status(500).json({ message: "Error updating profile", error: error.message });
+    }
+};
+
 // for Availabilty of service provider
 
 exports.updateAvailability = async (req, res) => {

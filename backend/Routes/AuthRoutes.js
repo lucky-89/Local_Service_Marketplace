@@ -1,6 +1,6 @@
 const express = require('express');
 const { registerUser, loginUser, getUserProfile, updateClientProfile, getActiveServiceProviders, bookServiceProvider, getServiceProviderBookings, getClientBookings,verifyOtp,resendOtp } = require('../Controller/ClientAuth');
-const { registerServiceProvider, loginServiceProvider, getSpProfile, updateAvailability, getAvailability,updateBookingStatus} = require('../Controller/ServiceProviderAuth');
+const { registerServiceProvider, loginServiceProvider, getSpProfile, updateAvailability, getAvailability,updateBookingStatus, updateSpProfile} = require('../Controller/ServiceProviderAuth');
 const { authenticateToken } = require('../authMiddleware'); 
 const router = express.Router();
 
@@ -23,6 +23,7 @@ router.put('/bookings/:bookingId/status', authenticateToken, updateBookingStatus
 router.post('/spSignup', registerServiceProvider);
 router.post('/spLogin', loginServiceProvider);
 router.get('/spProfile', authenticateToken, getSpProfile);
+router.patch('/updateSpProfile', authenticateToken,updateSpProfile);
 
 
 router.patch("/availability", authenticateToken, updateAvailability); // for changing the availability of service provider (isAvailable, servicePincode)
