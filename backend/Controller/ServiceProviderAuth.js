@@ -120,6 +120,9 @@ exports.updateAvailability = async (req, res) => {
         const user = await User.findById(req.user.id);
         if (!user) return res.status(404).json({ message: "User not found" });
 
+        if(user.tokens<2){
+            return res.status(404).json({ message: "You are not authorised for marked availability" });
+        }
         if (isAvailable) {
             if (!servicePinCodes || servicePinCodes.length === 0) {
                 return res.status(400).json({ message: "Please provide at least one pincode" });

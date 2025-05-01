@@ -2,11 +2,12 @@ const mongoose = require('mongoose');
 
 const serviceProviderSchema = new mongoose.Schema({
     name: { type: String, required: true },
-    email: { type: String, required: true },
+    email: { type: String, required: true, unique: true },
     phone: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     category: { type: String, required: true },
     price: { type: Number, required: true },
+    tokens: { type: Number, default: 2 },
     isAvailable: { type: Boolean, default: false }, 
     servicePinCodes: { type: [String], default: [] },
     lastUpdated: { type: Date, default: Date.now },

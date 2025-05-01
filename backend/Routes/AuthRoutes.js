@@ -2,6 +2,19 @@ const express = require('express');
 const { registerUser, loginUser, getUserProfile, updateClientProfile, getActiveServiceProviders, bookServiceProvider, getServiceProviderBookings, getClientBookings,verifyOtp,resendOtp } = require('../Controller/ClientAuth');
 const { registerServiceProvider, loginServiceProvider, getSpProfile, updateAvailability, getAvailability,updateBookingStatus, updateSpProfile} = require('../Controller/ServiceProviderAuth');
 const { authenticateToken } = require('../authMiddleware'); 
+
+
+const { 
+    initiatePayment, 
+    verifyPayment 
+} = require('../Controller/paymentController');
+const { 
+    generateOTP, 
+    verifyOTP, 
+    completeBooking 
+} = require('../Controller/bookingController');
+
+
 const router = express.Router();
 
 router.post('/clSignup', registerUser);
@@ -28,5 +41,15 @@ router.patch('/updateSpProfile', authenticateToken,updateSpProfile);
 
 router.patch("/availability", authenticateToken, updateAvailability); // for changing the availability of service provider (isAvailable, servicePincode)
 router.get("/getavailability", authenticateToken, getAvailability); // check the available service provider (client side)
+
+// Payment routes
+router.post('/bookings/:bookingId/pay', authenticateToken, initiatePayment);
+router.post('/payments/verify', verifyPayment);
+
+// OTP and completion routes
+router.post('/bookings/:bookingId/otp', authenticateToken, generateOTP);
+router.post('/bookings/:bookingId/verify-otp', authenticateToken, verifyOTP);
+router.post('/bookings/:bookingId/complete', authenticateToken, completeBooking);
+
 module.exports = router;
 

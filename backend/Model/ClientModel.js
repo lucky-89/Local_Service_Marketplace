@@ -9,7 +9,7 @@ const clientSchema = new mongoose.Schema({
     servicePinCode: { type: String }, 
     isVerified: { type: Boolean, default: false },
     bookings: [{
-        _id: { type: mongoose.Schema.Types.ObjectId, auto: true }, // Unique ID for each booking
+        _id: { type: mongoose.Schema.Types.ObjectId, auto: true },
         serviceProviderId: { 
             type: mongoose.Schema.Types.ObjectId, 
             ref: 'Service_Provider' 
@@ -23,6 +23,25 @@ const clientSchema = new mongoose.Schema({
             type: String, 
             enum: ['Pending', 'Confirmed', 'Completed'], 
             default: 'Pending' 
+        },
+        paymentStatus: { 
+            type: String, 
+            enum: ['Pending', 'Paid'], 
+            default: 'Pending' 
+        },
+        paymentMethod: {
+            type: String,
+            enum: ['Cash', 'Online']
+        },
+        otp: String,
+        otpExpires: Date,
+        review: {
+            rating: { 
+                type: Number, 
+                min: 1, 
+                max: 5 
+            },
+            comment: String
         }
     }]
 }, { timestamps: true });
