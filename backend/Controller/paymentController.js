@@ -96,7 +96,7 @@ exports.initiatePayment = async (req, res) => {
                 platformFee,
                 serviceFee: 0,
                 paymentMethod: 'cash',
-                status: 'completed'
+                status: 'pending'
             });
             await payment.save();
 
@@ -130,6 +130,7 @@ exports.verifyPayment = async (req, res) => {
             .createHmac('sha256', process.env.RAZORPAY_KEY_SECRET)
             .update(`${razorpay_order_id}|${razorpay_payment_id}`)
             .digest('hex');
+        console.log("sig",generatedSignature);
 
         if (generatedSignature !== razorpay_signature) {
             return res.status(400).json({
@@ -140,13 +141,15 @@ exports.verifyPayment = async (req, res) => {
 
         // 2. Update payment status
         const payment = await Payment.findOneAndUpdate(
-            { razorpayPaymentId: razorpay_order_id },
+            { razorpayPaymentId: razorpay_payment_id },
             { 
                 status: 'completed',
                 razorpayPaymentId: razorpay_payment_id
             },
             { new: true }
         );
+
+        console.log("payment",payment);
 
         if (!payment) {
             return res.status(404).json({
@@ -163,6 +166,7 @@ exports.verifyPayment = async (req, res) => {
                 message: 'Client with booking not found'
             });
         }
+        console.log("client",client);
 
         const booking = client.bookings.id(payment.bookingId);
         if (!booking) {
@@ -171,6 +175,7 @@ exports.verifyPayment = async (req, res) => {
                 message: 'Booking not found in client'
             });
         }
+        console.log("booking",booking);
 
         booking.paymentStatus = 'Paid';
 
@@ -181,6 +186,7 @@ exports.verifyPayment = async (req, res) => {
                 message: 'Service provider not found'
             });
         }
+        console.log("serviceP",serviceProvider);
 
         serviceProvider.tokens -= 1;
 
