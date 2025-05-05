@@ -40,7 +40,7 @@ router.patch('/updateSpProfile', authenticateToken,updateSpProfile);
 
 
 router.patch("/availability", authenticateToken, updateAvailability); // for changing the availability of service provider (isAvailable, servicePincode)
-router.get("/getavailability", authenticateToken, getAvailability); // check the available service provider (client side)
+router.get("/getavailability", authenticateToken, getActiveServiceProviders); // check the available service provider (client side)
 
 // Payment routes
 router.post('/bookings/:bookingId/pay', authenticateToken, initiatePayment);
