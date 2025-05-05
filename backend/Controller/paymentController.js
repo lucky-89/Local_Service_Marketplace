@@ -141,7 +141,7 @@ exports.verifyPayment = async (req, res) => {
 
         // 2. Update payment status
         const payment = await Payment.findOneAndUpdate(
-            { razorpayPaymentId: razorpay_payment_id },
+            { razorpayPaymentId: razorpay_order_id },
             { 
                 status: 'completed',
                 razorpayPaymentId: razorpay_payment_id
