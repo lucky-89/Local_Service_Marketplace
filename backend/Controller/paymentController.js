@@ -192,7 +192,7 @@ exports.verifyPayment = async (req, res) => {
 
         // 5. Save all & notify
         await Promise.all([client.save(), serviceProvider.save()]);
-        // await sendPaymentEmails(client, serviceProvider, payment.amount);
+        await sendPaymentEmails(client, serviceProvider, payment.amount);
 
         res.status(200).json({
             success: true,
