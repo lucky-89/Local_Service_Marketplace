@@ -101,8 +101,8 @@ exports.initiatePayment = async (req, res) => {
             await payment.save();
 
             // Update booking and tokens
-            booking.paymentStatus = 'Paid';
-            serviceProvider.tokens -= 1;
+          
+           
             
             await Promise.all([client.save(), serviceProvider.save()]);
             await sendPaymentEmails(client, serviceProvider, totalAmount);
@@ -168,7 +168,7 @@ exports.verifyPayment = async (req, res) => {
         }
         console.log("client",client);
 
-        const booking = client.bookings.id(payment.bookingId);
+        const booking = client.bookings._id(payment.bookingId);
         if (!booking) {
             return res.status(404).json({
                 success: false,
@@ -188,11 +188,11 @@ exports.verifyPayment = async (req, res) => {
         }
         console.log("serviceP",serviceProvider);
 
-        serviceProvider.tokens -= 1;
+        serviceProvider.tokens = 1;
 
         // 5. Save all & notify
         await Promise.all([client.save(), serviceProvider.save()]);
-        await sendPaymentEmails(client, serviceProvider, payment.amount);
+        // await sendPaymentEmails(client, serviceProvider, payment.amount);
 
         res.status(200).json({
             success: true,
