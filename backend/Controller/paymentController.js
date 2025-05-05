@@ -127,9 +127,13 @@ exports.verifyPayment = async (req, res) => {
     try {
         // Validate signature
         const generatedSignature = crypto
-            .createHmac('sha256', process.env.RAZORPAY_KEY_SECRET)
-            .update(`${razorpay_order_id} | ${razorpay_payment_id}`)
-            .digest('hex');
+    .createHmac('sha256', process.env.RAZORPAY_KEY_SECRET)
+    .update(`${razorpay_order_id}|${razorpay_payment_id}`)
+    .digest('hex');
+
+
+        // const hmac_256=crypto.createHmac();
+        // const generated signature=hmac_sha256()
 
         if (generatedSignature !== razorpay_signature) {
             return res.status(400).json({ 
