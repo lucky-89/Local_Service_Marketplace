@@ -29,7 +29,8 @@ const sendPaymentEmails = async (client, serviceProvider, amount) => {
                <p>Amount: ₹${amount}</p>`
     };
 
-    await sgMail.send([clientMsg, spMsg]);
+    await sgMail.send(clientMsg);
+    await sgMail.send(spMsg);
 };
 
 exports.initiatePayment = async (req, res) => {
