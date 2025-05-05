@@ -140,8 +140,8 @@ exports.verifyPayment = async (req, res) => {
 
         // 2. Update payment status
         const payment = await Payment.findOneAndUpdate(
-            { razorpayOrderId: razorpay_order_id }, // 🛠️ make sure this matches your DB field
-            {
+            { razorpayPaymentId: razorpay_order_id },
+            { 
                 status: 'completed',
                 razorpayPaymentId: razorpay_payment_id
             },
@@ -174,7 +174,6 @@ exports.verifyPayment = async (req, res) => {
 
         booking.paymentStatus = 'Paid';
 
-        // 4. Update service provider tokens
         const serviceProvider = await ServiceProvider.findById(booking.serviceProviderId);
         if (!serviceProvider) {
             return res.status(404).json({
