@@ -125,27 +125,23 @@ exports.verifyPayment = async (req, res) => {
     const { razorpay_payment_id, razorpay_order_id, razorpay_signature } = req.body;
 
     try {
-        // Validate signature
+        // 1. Validate signature
         const generatedSignature = crypto
-    .createHmac('sha256', process.env.RAZORPAY_KEY_SECRET)
-    .update(`${razorpay_order_id}|${razorpay_payment_id}`)
-    .digest('hex');
-
-
-        // const hmac_256=crypto.createHmac();
-        // const generated signature=hmac_sha256()
+            .createHmac('sha256', process.env.RAZORPAY_KEY_SECRET)
+            .update(`${razorpay_order_id}|${razorpay_payment_id}`)
+            .digest('hex');
 
         if (generatedSignature !== razorpay_signature) {
-            return res.status(400).json({ 
+            return res.status(400).json({
                 success: false,
-                message: 'Invalid payment signature' 
+                message: 'Invalid payment signature'
             });
         }
-        
-        // Update payment status
+
+        // 2. Update payment status
         const payment = await Payment.findOneAndUpdate(
-            { razorpayPaymentId: razorpay_order_id },
-            { 
+            { razorpayOrderId: razorpay_order_id }, // 🛠️ make sure this matches your DB field
+            {
                 status: 'completed',
                 razorpayPaymentId: razorpay_payment_id
             },
@@ -153,21 +149,43 @@ exports.verifyPayment = async (req, res) => {
         );
 
         if (!payment) {
-            return res.status(404).json({ 
+            return res.status(404).json({
                 success: false,
-                message: 'Payment record not found' 
+                message: 'Payment record not found'
             });
         }
 
-        // Update client booking
+        // 3. Update client booking
         const client = await Client.findOne({ 'bookings._id': payment.bookingId });
+        if (!client) {
+            return res.status(404).json({
+                success: false,
+                message: 'Client with booking not found'
+            });
+        }
+
         const booking = client.bookings.id(payment.bookingId);
+        if (!booking) {
+            return res.status(404).json({
+                success: false,
+                message: 'Booking not found in client'
+            });
+        }
+
         booking.paymentStatus = 'Paid';
-        
-        // Update service provider tokens
+
+        // 4. Update service provider tokens
         const serviceProvider = await ServiceProvider.findById(booking.serviceProviderId);
+        if (!serviceProvider) {
+            return res.status(404).json({
+                success: false,
+                message: 'Service provider not found'
+            });
+        }
+
         serviceProvider.tokens -= 1;
-        
+
+        // 5. Save all & notify
         await Promise.all([client.save(), serviceProvider.save()]);
         await sendPaymentEmails(client, serviceProvider, payment.amount);
 
@@ -182,10 +200,11 @@ exports.verifyPayment = async (req, res) => {
         });
 
     } catch (error) {
-        res.status(500).json({ 
+        console.error('Payment Verification Error:', error); // helpful during development
+        res.status(500).json({
             success: false,
             message: 'Payment verification failed',
-            error: process.env.NODE_ENV === 'development' ? error.message : null
+            error: error.message // Show real error message
         });
     }
 };
