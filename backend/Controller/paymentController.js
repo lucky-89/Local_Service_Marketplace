@@ -3,8 +3,7 @@ const crypto = require('crypto');
 const Payment = require('../Model/PaymentModel');
 const Client = require('../Model/ClientModel');
 const ServiceProvider = require('../Model/Service_ProviderModel');
-const sgMail = require('@sendgrid/mail');
-sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+
 
 const razorpay = new Razorpay({
     key_id: process.env.RAZORPAY_KEY_ID,
@@ -12,26 +11,6 @@ const razorpay = new Razorpay({
 });
 
 
-const sendPaymentEmails = async (client, serviceProvider, amount) => {
-    const clientMsg = {
-        to: client.email,
-        from: process.env.SENDER_EMAIL,
-        subject: 'Payment Successful',
-        html: `<h2>₹${amount} payment confirmed!</h2>
-               <p>Service Provider: ${serviceProvider.name}</p>`
-    };
-
-    const spMsg = {
-        to: serviceProvider.email,
-        from: process.env.SENDER_EMAIL,
-        subject: 'New Payment Received',
-        html: `<h2>New payment from ${client.name}</h2>
-               <p>Amount: ₹${amount}</p>`
-    };
-
-    await sgMail.send(clientMsg);
-    await sgMail.send(spMsg);
-};
 
 exports.initiatePayment = async (req, res) => {
     const { bookingId } = req.params;
@@ -106,7 +85,7 @@ exports.initiatePayment = async (req, res) => {
            
             
             await Promise.all([client.save(), serviceProvider.save()]);
-            await sendPaymentEmails(client, serviceProvider, totalAmount);
+           
 
             res.status(200).json({
                 success: true,
@@ -193,7 +172,8 @@ exports.verifyPayment = async (req, res) => {
 
         // 5. Save all & notify
         await Promise.all([client.save(), serviceProvider.save()]);
-        await sendPaymentEmails(client, serviceProvider, payment.amount);
+
+        // await sendPaymentEmails(client, serviceProvider, payment.amount);
 
         res.status(200).json({
             success: true,

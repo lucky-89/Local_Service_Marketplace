@@ -3,7 +3,6 @@ const { registerUser, loginUser, getUserProfile, updateClientProfile, getActiveS
 const { registerServiceProvider, loginServiceProvider, getSpProfile, updateAvailability, getAvailability,updateBookingStatus, updateSpProfile} = require('../Controller/ServiceProviderAuth');
 const { authenticateToken } = require('../authMiddleware'); 
 
-
 const { 
     initiatePayment, 
     verifyPayment 
@@ -13,6 +12,7 @@ const {
     verifyOTP, 
     completeBooking 
 } = require('../Controller/bookingController');
+const { sendEmail } = require('../Controller/sendEmail');
 
 
 const router = express.Router();
@@ -45,6 +45,7 @@ router.get("/getavailability", authenticateToken, getActiveServiceProviders); //
 // Payment routes
 router.post('/bookings/:bookingId/pay', authenticateToken, initiatePayment);
 router.post('/payments/verify', verifyPayment);
+router.post('/sendemail',sendEmail);
 
 // OTP and completion routes
 router.post('/bookings/:bookingId/otp', authenticateToken, generateOTP);
