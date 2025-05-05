@@ -168,7 +168,7 @@ exports.verifyPayment = async (req, res) => {
         }
         console.log("client",client);
 
-        const booking = client.bookings._id(payment.bookingId);
+        const booking = client.bookings.id(payment.bookingId);
         if (!booking) {
             return res.status(404).json({
                 success: false,
