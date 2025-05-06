@@ -1,5 +1,5 @@
 const sgMail = require('@sendgrid/mail');
-sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+
 const ServiceProvider=require('../Model/Service_ProviderModel')
 const Client=require('../Model/ClientModel');
 const Payment = require('../Model/PaymentModel');;
@@ -7,6 +7,7 @@ const Payment = require('../Model/PaymentModel');;
 
 exports.sendEmail = async (req, res) => {
     const { razorpay_payment_id } = req.body;
+    sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
     try {
         const payment = await Payment.findOne({ razorpayPaymentId: razorpay_payment_id });
@@ -42,13 +43,18 @@ exports.sendEmail = async (req, res) => {
         };
         const spmsg = {
             to: serviceProvider.email,
-            from: process.env.SENDER_EMAIL,
+            from: process.env.SENDER_EMAIL1,
             subject: 'Payment Confirmation',
             html: `<p>Your OTP is: ${payment.amount}</p>`
         };
 
         await sgMail.send(msg);
-        await sgMail.send(spmsg);
+
+        setTimeout(async()=>{
+            sgMail.setApiKey(process.env.SENDGRID_API_KEY1);
+            await sgMail.send(spmsg);
+        },5000);
+        
 
         res.status(200).json({ message: 'Confirmation sent successfully' });
     } catch (error) {
