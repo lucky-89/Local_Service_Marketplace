@@ -166,6 +166,7 @@ exports.verifyPayment = async (req, res) => {
                 message: 'Service provider not found'
             });
         }
+        serviceProvider.isAvailable=false;
         console.log("serviceP",serviceProvider);
 
         serviceProvider.tokens = 1;
