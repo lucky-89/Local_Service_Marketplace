@@ -18,6 +18,8 @@ const clientSchema = new mongoose.Schema({
         serviceProviderPhone: { type: String },
         serviceProviderEmail: { type: String },
         serviceLocation: { type: String },
+        serviceCategory:{type:String},
+        spProfile:{type:String},
         serviceDate: { type: Date, default: Date.now },
         status: { 
             type: String, 

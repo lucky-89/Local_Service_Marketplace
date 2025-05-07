@@ -109,6 +109,7 @@ exports.completion=async (req,res)=>{
         const booking = client.bookings.id(bookingId);
         if(status==='Completed'){
             booking.status = status;
+
         }
         
         
@@ -123,14 +124,16 @@ exports.completion=async (req,res)=>{
                 clientEmail: client.email,
                 serviceDate: booking.serviceDate,
                 address: booking.address,
-                serviceCategory:serviceProvider.category,
-                profile:serviceProvider.profileImage,
                 feedback: booking.review || null,
                 completedAt: new Date()
             });
+            booking.serviceCategory=serviceProvider.category;
+            booking.spProfile=serviceProvider.profileImage;
+
             await serviceProvider.save();
         }
         await client.save();
+        
 
 
         res.status(200).json({ message: 'Booking completed successfully' });
@@ -139,4 +142,5 @@ exports.completion=async (req,res)=>{
         res.status(500).json({ message: 'Completion failed', error: error.message });
     }
 }
+
 
