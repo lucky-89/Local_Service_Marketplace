@@ -111,7 +111,7 @@ exports.completion=async (req,res)=>{
             booking.status = status;
         }
         
-        await client.save();
+        
 
         const serviceProvider = await ServiceProvider.findById(booking.serviceProviderId);
 
@@ -130,6 +130,7 @@ exports.completion=async (req,res)=>{
             });
             await serviceProvider.save();
         }
+        await client.save();
 
 
         res.status(200).json({ message: 'Booking completed successfully' });
