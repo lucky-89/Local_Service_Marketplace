@@ -10,7 +10,8 @@ const {
 const { 
     generateOTP, 
     verifyOTP, 
-    completeBooking 
+    completion,
+    markFeedback 
 } = require('../Controller/bookingController');
 const { sendEmail } = require('../Controller/sendEmail');
 
@@ -50,7 +51,8 @@ router.post('/sendemail',sendEmail);
 // OTP and completion routes
 router.post('/bookings/:bookingId/otp', authenticateToken, generateOTP);
 router.post('/bookings/:bookingId/verify-otp', authenticateToken, verifyOTP);
-router.post('/bookings/:bookingId/complete', authenticateToken, completeBooking);
+router.post('/bookings/:bookingId/feedback', authenticateToken, markFeedback);
+router.put('/bookings/:bookingId/complete', authenticateToken, completion);
 
 module.exports = router;
 

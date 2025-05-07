@@ -13,7 +13,20 @@ const serviceProviderSchema = new mongoose.Schema({
     lastUpdated: { type: Date, default: Date.now },
     profileImage: { type: String}, 
     aadharImage: { type: String },  
-    isVerified: { type: Boolean, default: false }   
+    isVerified: { type: Boolean, default: false },
+    completedService: [{
+    clientId: { type: mongoose.Schema.Types.ObjectId, ref: 'Client' },
+    clientName: String,
+    clientEmail: String,
+    serviceDate: Date,
+    address: String,
+    feedback: {
+        rating: Number,
+        comment: String
+    },
+    completedAt: Date
+}]
+
 }, { timestamps: true });
 
 module.exports = mongoose.model('Service_Provider', serviceProviderSchema);
