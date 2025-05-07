@@ -123,6 +123,8 @@ exports.completion=async (req,res)=>{
                 clientEmail: client.email,
                 serviceDate: booking.serviceDate,
                 address: booking.address,
+                serviceCategory:serviceProvider.category,
+                profile:serviceProvider.profileImage,
                 feedback: booking.review || null,
                 completedAt: new Date()
             });

@@ -20,6 +20,8 @@ const serviceProviderSchema = new mongoose.Schema({
     clientEmail: String,
     serviceDate: Date,
     address: String,
+    serviceCategory:String,
+    profile:String,
     feedback: {
         rating: Number,
         comment: String

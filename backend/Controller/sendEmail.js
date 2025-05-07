@@ -4,7 +4,6 @@ const ServiceProvider=require('../Model/Service_ProviderModel')
 const Client=require('../Model/ClientModel');
 const Payment = require('../Model/PaymentModel');;
 
-
 exports.sendEmail = async (req, res) => {
     const { razorpay_payment_id } = req.body;
     sgMail.setApiKey(process.env.SENDGRID_API_KEY);
