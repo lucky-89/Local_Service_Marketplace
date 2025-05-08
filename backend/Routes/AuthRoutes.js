@@ -1,12 +1,11 @@
 const express = require('express');
 const { registerUser, loginUser, getUserProfile, updateClientProfile, getActiveServiceProviders, bookServiceProvider, getServiceProviderBookings, getClientBookings,verifyOtp,resendOtp } = require('../Controller/ClientAuth');
-const { registerServiceProvider, loginServiceProvider, getSpProfile, updateAvailability, getAvailability,updateBookingStatus, updateSpProfile} = require('../Controller/ServiceProviderAuth');
+const { registerServiceProvider, loginServiceProvider, getSpProfile, updateAvailability, getAvailability,updateBookingStatus, updateSpProfile, subscribtionPlan} = require('../Controller/ServiceProviderAuth');
 const { authenticateToken } = require('../authMiddleware'); 
 
-const { 
-    initiatePayment, 
-    verifyPayment 
-} = require('../Controller/paymentController');
+const { initiateSbPayment,verifySbPayment} = require('../Controller/subscriptionController');
+
+const {initiatePayment,verifyPayment}=require('../Controller/paymentController');
 const { 
     generateOTP, 
     verifyOTP, 
@@ -54,5 +53,9 @@ router.post('/bookings/:bookingId/verify-otp', authenticateToken, verifyOTP);
 router.post('/bookings/:bookingId/feedback', authenticateToken, markFeedback);
 router.put('/bookings/:bookingId/complete', authenticateToken, completion);
 
+// for service provider subscription
+
+router.post('/subscribe/initiate', authenticateToken, initiateSbPayment);
+router.post('/subscribe/verify', verifySbPayment);
 module.exports = router;
 

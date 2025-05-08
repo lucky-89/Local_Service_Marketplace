@@ -5,6 +5,7 @@ const jwt = require("jsonwebtoken");
 const Client=require('../Model/ClientModel');
 
 
+
 const router = express.Router();
 
 // Register a service provider
@@ -187,3 +188,7 @@ exports.updateBookingStatus = async (req, res) => {
         res.status(500).json({ message: 'Error updating booking status', error: error.message });
     }
 };
+
+
+
+
