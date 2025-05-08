@@ -88,7 +88,20 @@ exports.markFeedback = async (req, res) => {
         booking.review = { rating, comment };
         await client.save();
 
-        
+        const serviceProvider = await ServiceProvider.findById(booking.serviceProviderId);
+if (serviceProvider) {
+    const serviceEntry = serviceProvider.completedService.find(
+        (service) => service.clientId.toString() === client._id.toString() && 
+                     service.serviceDate.toISOString() === booking.serviceDate.toISOString()
+    );
+
+    if (serviceEntry) {
+        serviceEntry.feedback.rating = rating;
+        serviceEntry.feedback.comment = comment;
+    }
+
+    await serviceProvider.save();
+}
 
         res.status(200).json({ message: 'Feedback given successfully' });
     } catch (error) {
