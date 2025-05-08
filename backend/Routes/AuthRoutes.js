@@ -13,7 +13,11 @@ const {
     markFeedback 
 } = require('../Controller/bookingController');
 const { sendEmail } = require('../Controller/sendEmail');
-
+// const {
+//     generateWeeklyPayouts,
+//     processPayout,
+//     getAllPayouts
+//   } = require('../controllers/payoutController');
 
 const router = express.Router();
 
@@ -57,5 +61,12 @@ router.put('/bookings/:bookingId/complete', authenticateToken, completion);
 
 router.post('/subscribe/initiate', authenticateToken, initiateSbPayment);
 router.post('/subscribe/verify', verifySbPayment);
+
+
+/// weekly payout
+// router.post('/generate-weekly', generateWeeklyPayouts);
+// router.post('/process/:payoutId', processPayout);
+// router.get('/all', getAllPayouts);
+
 module.exports = router;
 

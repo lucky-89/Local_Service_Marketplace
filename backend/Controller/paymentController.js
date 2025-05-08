@@ -170,11 +170,11 @@ exports.verifyPayment = async (req, res) => {
         console.log("serviceP",serviceProvider);
 
         serviceProvider.tokens = 1;
+        serviceProvider.subscription.serviceCredits=serviceProvider.subscription.serviceCredits-1;
 
         // 5. Save all & notify
         await Promise.all([client.save(), serviceProvider.save()]);
 
-        // await sendPaymentEmails(client, serviceProvider, payment.amount);
 
         res.status(200).json({
             success: true,

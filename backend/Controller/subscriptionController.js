@@ -1,11 +1,11 @@
 const Razorpay = require('razorpay');
 const crypto = require('crypto');
 const ServiceProvider = require('../Model/Service_ProviderModel');
-
+const jwt = require('jsonwebtoken');
 
 const razorpay = new Razorpay({
-    key_id: process.env.RAZORPAY_KEY_ID,
-    key_secret: process.env.RAZORPAY_KEY_SECRET
+  key_id: process.env.RAZORPAY_KEY_ID,
+  key_secret: process.env.RAZORPAY_KEY_SECRET
 });
 
 exports.initiateSbPayment = async (req, res) => {
@@ -52,27 +52,42 @@ exports.verifySbPayment = async (req, res) => {
         razorpay_order_id,
         razorpay_payment_id,
         razorpay_signature,
-        plan
+        plan,
+        token
       } = req.body;
   
+      let decoded;
+    try {
+      decoded = jwt.verify(token, process.env.JWT_SECRET); // Replace with your actual secret
+    } catch (err) {
+      return res.status(401).json({ success: false, message: "Invalid or expired token" });
+    }
+      
+
    
       const generatedSignature = crypto
-        .createHmac("sha256", process.env.RAZORPAY_SECRET)
+        .createHmac("sha256", razorpay.key_secret)
         .update(`${razorpay_order_id}|${razorpay_payment_id}`)
         .digest("hex");
   
       if (generatedSignature !== razorpay_signature) {
         return res.status(400).json({ success: false, message: "Invalid signature" });
       }
+
   
-      const user = await ServiceProvider.findById(req.user.id);
+      console.log(generatedSignature);
+
+      const user = await ServiceProvider.findById(decoded.id);
       if (!user) return res.status(404).json({ message: "Service provider not found" });
   
+      console.log(user);
 
       const creditsMap = { Basic: 30, Standard: 60, Premium: 110 };
-      const prevCred=user.subscription.serviceCredits;
-      const credits = creditsMap[plan] + prevCred;
+      let prevCred=user.subscription.serviceCredits;
+      let credits=0;
+       credits = creditsMap[plan] + prevCred;
   
+      console.log(credits);
       user.subscription = {
         isActive: true,
         plan,
@@ -81,6 +96,8 @@ exports.verifySbPayment = async (req, res) => {
         razorpaySubscriptionId: razorpay_order_id,
         status: 'active'
       };
+
+      console.log(user.subscription);
   
       await user.save();
   
@@ -90,4 +107,5 @@ exports.verifySbPayment = async (req, res) => {
       res.status(500).json({ error: "Payment verification failed" });
     }
   };
+
 
