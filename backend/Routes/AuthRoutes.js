@@ -65,9 +65,9 @@ router.post('/subscribe/verify', verifySbPayment);
 
 
 /// weekly payout
-router.post('/generate-weekly',authenticateToken, generateWeeklyPayouts);
+router.post('/generate-weekly', generateWeeklyPayouts);
 
-router.get('/unpaid-this-week',authenticateToken, getUnpaidProvidersWithAmountThisWeek);
+router.get('/unpaid-this-week', getUnpaidProvidersWithAmountThisWeek);
 
 
 module.exports = router;
