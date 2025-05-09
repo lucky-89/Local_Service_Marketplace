@@ -1,13 +1,20 @@
-const Payout = require('../models/Payout');
-const ServiceProvider = require('../models/Service_ProviderModel');
-const razorpay = require('../utils/razorpay');
+const Payout = require('../Model/Payout');
+const ServiceProvider = require('../Model/Service_ProviderModel');
 
-// Helper: Get current week range
+
+
 const getWeekRange = () => {
   const now = new Date();
-  const day = now.getDay(); // 0-6 (Sun-Sat)
-  const sunday = new Date(now.setDate(now.getDate() - day));
-  const monday = new Date(new Date(sunday).setDate(sunday.getDate() - 6));
+  const day = now.getDay(); // 0 (Sun) to 6 (Sat)
+  const diffToMonday = now.getDate() - day + (day === 0 ? -6 : 1);
+
+  const monday = new Date(now.setDate(diffToMonday));
+  monday.setHours(0, 0, 0, 0);
+
+  const sunday = new Date(monday);
+  sunday.setDate(monday.getDate() + 6);
+  sunday.setHours(23, 59, 59, 999);
+
   return { weekStart: monday, weekEnd: sunday };
 };
 
@@ -17,12 +24,16 @@ exports.generateWeeklyPayouts = async (req, res) => {
 
   try {
     const providers = await ServiceProvider.find({});
-
     const payouts = [];
 
     for (const provider of providers) {
-      // You must have booking history or earnings per provider; mock calculation here
-      const totalEarnings = provider.weeklyEarnings || 0;
+      const weeklyCompleted = provider.completedService.filter(service => {
+        const completedAt = new Date(service.completedAt).getTime();
+        return completedAt >= weekStart.getTime() && completedAt <= weekEnd.getTime();
+      });
+
+      const totalEarnings = weeklyCompleted.length * provider.price;
+
       if (totalEarnings <= 0 || !provider.upiId) continue;
 
       const newPayout = new Payout({
@@ -40,58 +51,48 @@ exports.generateWeeklyPayouts = async (req, res) => {
 
     res.status(200).json({ message: "Weekly payouts generated", payouts });
   } catch (err) {
+    console.error("Error generating payouts:", err);
     res.status(500).json({ error: err.message });
   }
 };
 
-// Admin triggers payment
-exports.processPayout = async (req, res) => {
-  const { payoutId } = req.params;
+// Get providers who completed work this week but haven’t been paid
+exports.getUnpaidProvidersWithAmountThisWeek = async (req, res) => {
+  const { weekStart, weekEnd } = getWeekRange();
+
   try {
-    const payout = await Payout.findById(payoutId).populate("serviceProvider");
-    if (!payout) return res.status(404).json({ message: "Payout not found" });
-
-    if (payout.status === 'paid') {
-      return res.status(400).json({ message: "Already paid" });
-    }
-
-    const transfer = await razorpay.payouts.create({
-      account_number: process.env.RAZORPAY_ACCOUNT_NO, // from Razorpay dashboard
-      fund_account: {
-        account_type: "vpa",
-        vpa: { address: payout.upiId },
-        contact: {
-          name: payout.serviceProvider.name,
-          type: "employee",
-          reference_id: payout.serviceProvider._id.toString(),
-          email: payout.serviceProvider.email,
-        },
-      },
-      amount: payout.amount * 100, // INR in paisa
-      currency: "INR",
-      mode: "UPI",
-      purpose: "payout",
-      queue_if_low_balance: true,
+    const allProviders = await ServiceProvider.find({});
+    const thisWeekPayouts = await Payout.find({
+      weekStartDate: { $gte: weekStart, $lte: weekEnd },
     });
 
-    payout.status = 'paid';
-    payout.razorpayTransferId = transfer.id;
-    payout.processedAt = new Date();
-    await payout.save();
+    const paidProviderIds = thisWeekPayouts.map(p => p.serviceProvider.toString());
+    const unpaidProviders = [];
 
-    res.status(200).json({ message: "Payout processed", payout });
-  } catch (err) {
-    console.error("Payout error", err);
-    res.status(500).json({ error: err.message });
-  }
-};
+    for (const provider of allProviders) {
+      if (paidProviderIds.includes(provider._id.toString())) continue;
 
-// Get all payouts (admin)
-exports.getAllPayouts = async (req, res) => {
-  try {
-    const payouts = await Payout.find().populate('serviceProvider');
-    res.status(200).json(payouts);
+      const weeklyCompleted = provider.completedService.filter(service => {
+        const completedAt = new Date(service.completedAt).getTime();
+        return completedAt >= weekStart.getTime() && completedAt <= weekEnd.getTime();
+      });
+
+      const totalEarnings = weeklyCompleted.length * provider.price;
+
+      if (totalEarnings <= 0) continue;
+
+      unpaidProviders.push({
+        _id: provider._id,
+        name: provider.name,
+        email: provider.email,
+        upiId: provider.upiId,
+        unpaidAmount: totalEarnings,
+      });
+    }
+
+    res.status(200).json(unpaidProviders);
   } catch (err) {
+    console.error("Error fetching unpaid providers", err);
     res.status(500).json({ error: err.message });
   }
 };

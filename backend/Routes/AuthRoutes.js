@@ -2,6 +2,7 @@ const express = require('express');
 const { registerUser, loginUser, getUserProfile, updateClientProfile, getActiveServiceProviders, bookServiceProvider, getServiceProviderBookings, getClientBookings,verifyOtp,resendOtp } = require('../Controller/ClientAuth');
 const { registerServiceProvider, loginServiceProvider, getSpProfile, updateAvailability, getAvailability,updateBookingStatus, updateSpProfile, subscribtionPlan} = require('../Controller/ServiceProviderAuth');
 const { authenticateToken } = require('../authMiddleware'); 
+const adminAuth=require('../adminAuth');
 
 const { initiateSbPayment,verifySbPayment} = require('../Controller/subscriptionController');
 
@@ -13,11 +14,11 @@ const {
     markFeedback 
 } = require('../Controller/bookingController');
 const { sendEmail } = require('../Controller/sendEmail');
-// const {
-//     generateWeeklyPayouts,
-//     processPayout,
-//     getAllPayouts
-//   } = require('../controllers/payoutController');
+
+const {
+    generateWeeklyPayouts,
+    getUnpaidProvidersWithAmountThisWeek
+  } = require('../Controller/payoutController');
 
 const router = express.Router();
 
@@ -64,9 +65,9 @@ router.post('/subscribe/verify', verifySbPayment);
 
 
 /// weekly payout
-// router.post('/generate-weekly', generateWeeklyPayouts);
-// router.post('/process/:payoutId', processPayout);
-// router.get('/all', getAllPayouts);
+router.post('/generate-weekly',adminAuth, generateWeeklyPayouts);
+
+router.get('/unpaid-this-week',adminAuth, getUnpaidProvidersWithAmountThisWeek);
+
 
 module.exports = router;
-

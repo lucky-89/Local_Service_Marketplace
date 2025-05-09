@@ -1,5 +1,5 @@
 const sgMail = require('@sendgrid/mail');
-sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+
 
 const ServiceProvider = require('../Model/Service_ProviderModel');
 const Client = require('../Model/ClientModel');
@@ -20,9 +20,9 @@ exports.generateOTP = async (req, res) => {
         await client.save();
 
         const recipientEmail = client.email;
-        if (!recipientEmail || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(recipientEmail)) {
-            return res.status(400).json({ message: 'Invalid email address' });
-        }
+        
+
+        sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
         const msg = {
             to: recipientEmail,

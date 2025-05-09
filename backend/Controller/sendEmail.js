@@ -38,13 +38,13 @@ exports.sendEmail = async (req, res) => {
             to: client.email,
             from: process.env.SENDER_EMAIL,
             subject: 'Payment Confirmation',
-            html: `<p>Your OTP is: ${payment.amount}</p>`
+            html: `<p>The payment of: ${payment.amount} has been recieved successfully</p>`
         };
         const spmsg = {
             to: serviceProvider.email,
             from: process.env.SENDER_EMAIL1,
             subject: 'Payment Confirmation',
-            html: `<p>Your OTP is: ${payment.amount}</p>`
+            html: `<p>The payment: ${payment.amount} has been recieved successfully</p>`
         };
 
         await sgMail.send(msg);
