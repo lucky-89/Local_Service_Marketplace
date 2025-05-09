@@ -187,11 +187,11 @@ exports.verifyPayment = async (req, res) => {
         });
 
     } catch (error) {
-        console.error('Payment Verification Error:', error); // helpful during development
+        console.error('Payment Verification Error:', error); 
         res.status(500).json({
             success: false,
             message: 'Payment verification failed',
-            error: error.message // Show real error message
+            error: error.message 
         });
     }
 };
