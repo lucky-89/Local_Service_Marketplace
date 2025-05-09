@@ -2,7 +2,7 @@ const express = require('express');
 const { registerUser, loginUser, getUserProfile, updateClientProfile, getActiveServiceProviders, bookServiceProvider, getServiceProviderBookings, getClientBookings,verifyOtp,resendOtp } = require('../Controller/ClientAuth');
 const { registerServiceProvider, loginServiceProvider, getSpProfile, updateAvailability, getAvailability,updateBookingStatus, updateSpProfile, subscribtionPlan} = require('../Controller/ServiceProviderAuth');
 const { authenticateToken } = require('../authMiddleware'); 
-const adminAuth=require('../adminAuth');
+
 
 const { initiateSbPayment,verifySbPayment} = require('../Controller/subscriptionController');
 
@@ -65,9 +65,9 @@ router.post('/subscribe/verify', verifySbPayment);
 
 
 /// weekly payout
-router.post('/generate-weekly',adminAuth, generateWeeklyPayouts);
+router.post('/generate-weekly',authenticateToken, generateWeeklyPayouts);
 
-router.get('/unpaid-this-week',adminAuth, getUnpaidProvidersWithAmountThisWeek);
+router.get('/unpaid-this-week',authenticateToken, getUnpaidProvidersWithAmountThisWeek);
 
 
 module.exports = router;

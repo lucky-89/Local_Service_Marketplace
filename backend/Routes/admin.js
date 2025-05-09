@@ -15,9 +15,10 @@ router.post('/login', (req, res) => {
   }
 
 
-  const token = jwt.sign({ admin: true }, process.env.JWT_SECRET, { expiresIn: '1d' });
+  const token = jwt.sign({ email: ADMIN_EMAIL}, process.env.JWT_SECRET, { expiresIn: '1d' });
 
   res.status(200).json({ message: 'Login successful', token });
 });
 
 module.exports = router;
+
