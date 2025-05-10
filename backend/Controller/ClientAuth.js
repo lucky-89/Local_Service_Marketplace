@@ -312,7 +312,7 @@ exports.getServiceProviderBookings = async (req, res) => {
         if (!client) {
             return res.status(404).json({ message: "Client not found" });
         }
-
+        
         res.status(200).json({ bookings: client.bookings });
     } catch (error) {
         res.status(500).json({ message: "Error fetching client bookings", error: error.message });

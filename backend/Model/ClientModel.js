@@ -23,7 +23,7 @@ const clientSchema = new mongoose.Schema({
         serviceDate: { type: Date, default: Date.now },
         status: { 
             type: String, 
-            enum: ['Pending', 'Confirmed', 'Completed'], 
+            enum: ['Pending', 'Confirmed','Rejected', 'Completed'], 
             default: 'Pending' 
         },
         paymentStatus: { 

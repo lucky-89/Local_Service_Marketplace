@@ -163,7 +163,7 @@ exports.updateBookingStatus = async (req, res) => {
         const serviceProviderId = req.user.id;
 
        
-        const validStatuses = ['Pending', 'Confirmed', 'Completed'];
+        const validStatuses = ['Pending', 'Confirmed','Rejected', 'Completed'];
         if (!validStatuses.includes(status)) {
             return res.status(400).json({ message: 'Invalid status value' });
         }

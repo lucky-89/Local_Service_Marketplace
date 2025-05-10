@@ -36,7 +36,7 @@ exports.initiatePayment = async (req, res) => {
 
         if (paymentMethod === 'Online') {
             const serviceProvider = await ServiceProvider.findById(booking.serviceProviderId);
-            const platformFee = 100;
+            let platformFee = (serviceProvider.price*2.5)/100;
             const totalAmount = serviceProvider.price + platformFee;
 
             const options = {

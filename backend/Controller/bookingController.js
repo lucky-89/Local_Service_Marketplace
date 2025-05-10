@@ -12,6 +12,9 @@ exports.generateOTP = async (req, res) => {
         if (!client) return res.status(404).json({ message: 'Booking not found' });
 
         const booking = client.bookings.id(bookingId);
+        if(booking.status!=="Confirmed"){
+            return;
+        }
         const otp = Math.floor(100000 + Math.random() * 900000).toString();
         const otpExpires = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes
 
